@@ -6,11 +6,10 @@
         xmlns:vm="clr-namespace:SchoolScheduleApp.ViewModels"
       mc:Ignorable="d"
         Title="Панель Администратора" Height="720" Width="1200"
+        MinHeight="600" MinWidth="980"
         WindowStartupLocation="CenterScreen"
-        WindowStyle="None"
-        ResizeMode="NoResize"
-        AllowsTransparency="True"
-        Background="Transparent">
+        ResizeMode="CanResize"
+        Background="{DynamicResource WindowBackground}">
 
     <Window.DataContext>
         <vm:AdminViewModel/>

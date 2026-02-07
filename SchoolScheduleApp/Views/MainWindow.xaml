@@ -6,11 +6,10 @@
         xmlns:vm="clr-namespace:SchoolScheduleApp.ViewModels"
         mc:Ignorable="d"
         Title="Вход в систему" Height="650" Width="1000"
+        MinHeight="520" MinWidth="720"
         WindowStartupLocation="CenterScreen"
-        WindowStyle="None" 
-        ResizeMode="NoResize"
-        AllowsTransparency="True"
-        Background="Transparent">
+        ResizeMode="CanResize"
+        Background="#0f2027">
 
     <!-- Ресурсы для конвертации (нужны для чекбокса) -->
     <Window.Resources>
@@ -69,8 +68,9 @@
 
 
             <!-- 2. ЦЕНТРАЛЬНАЯ СТЕКЛЯННАЯ КАРТОЧКА -->
-            <Border Width="380" Height="500" CornerRadius="25"
-                    BorderBrush="#33FFFFFF" BorderThickness="1.5">
+            <Border MinWidth="300" MinHeight="420" MaxWidth="380" MaxHeight="500"
+                    HorizontalAlignment="Center" VerticalAlignment="Center" Margin="40"
+                    CornerRadius="25" BorderBrush="#33FFFFFF" BorderThickness="1.5">
 
                 <!-- Полупрозрачный фон самой карточки -->
                 <Border.Background>

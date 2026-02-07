@@ -20,7 +20,11 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
                         <Border Background="{TemplateBinding Background}" CornerRadius="5">
-                            <TextBlock Text="✎" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <TextBlock Text="✎"
+                                       FontSize="14"
+                                       Foreground="{TemplateBinding Foreground}"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"/>
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
@@ -241,7 +245,7 @@
                               materialDesign:DataGridAssist.ColumnHeaderPadding="10,8"
                               Margin="0">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Урок" Binding="{Binding LessonIndex}" Width="80"/>
+                            <DataGridTextColumn Header="Урок" Binding="{Binding DisplayLessonIndex}" Width="80"/>
                             <DataGridTextColumn Header="Предмет" Binding="{Binding Subject}" Width="*"/>
                             <DataGridTextColumn Header="Учитель" Binding="{Binding Teacher}" Width="240"/>
                             <DataGridTextColumn Header="Кабинет" Binding="{Binding Classroom}" Width="120"/>

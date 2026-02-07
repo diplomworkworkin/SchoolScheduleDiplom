@@ -71,6 +71,14 @@ namespace SchoolScheduleApp.ViewModels
             // 2. Загрузка данных из БД
             LoadDashboardData();
             LoadRoomLoadChart();
+
+            ScheduleStatusNotifier.ScheduleChanged += OnScheduleChanged;
+        }
+
+        private void OnScheduleChanged()
+        {
+            LoadDashboardData();
+            LoadRoomLoadChart();
         }
 
         private void LoadDashboardData()

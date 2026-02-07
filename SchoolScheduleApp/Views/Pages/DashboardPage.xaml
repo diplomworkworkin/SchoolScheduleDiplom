@@ -29,7 +29,11 @@
                     <StackPanel VerticalAlignment="Center" Margin="25,0,0,0">
                         <Border Width="45" Height="45" CornerRadius="12" Background="#2000d2ff" 
                                 HorizontalAlignment="Left" Margin="0,0,0,15">
-                            <TextBlock Text="👨‍🏫" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="22"/>
+                            <TextBlock Text="👨‍🏫"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"
+                                       FontSize="22"
+                                       Foreground="{DynamicResource PrimaryText}"/>
                         </Border>
 
                         <TextBlock Text="{Binding TeachersCount}" FontSize="36" FontWeight="Bold" 
@@ -48,7 +52,11 @@
                     <StackPanel VerticalAlignment="Center" Margin="25,0,0,0">
                         <Border Width="45" Height="45" CornerRadius="12" Background="#20bd00ff" 
                                 HorizontalAlignment="Left" Margin="0,0,0,15">
-                            <TextBlock Text="🎓" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="22"/>
+                            <TextBlock Text="🎓"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"
+                                       FontSize="22"
+                                       Foreground="{DynamicResource PrimaryText}"/>
                         </Border>
 
                         <TextBlock Text="{Binding StudentsCount}" FontSize="36" FontWeight="Bold" 
@@ -67,7 +75,11 @@
                     <StackPanel VerticalAlignment="Center" Margin="25,0,0,0">
                         <Border Width="45" Height="45" CornerRadius="12" Background="#2000ff9d" 
                                 HorizontalAlignment="Left" Margin="0,0,0,15">
-                            <TextBlock Text="📊" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="22"/>
+                            <TextBlock Text="📊"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"
+                                       FontSize="22"
+                                       Foreground="{DynamicResource PrimaryText}"/>
                         </Border>
                         <TextBlock Text="{Binding ScheduleStatus}" FontSize="24" FontWeight="Bold" 
                                    Foreground="{Binding ScheduleStatusBrush}" Margin="0,0,0,5"/>

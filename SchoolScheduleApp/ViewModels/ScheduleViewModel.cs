@@ -14,6 +14,7 @@ namespace SchoolScheduleApp.ViewModels
         public string Day { get; set; }
         public int DayOfWeek { get; set; }
         public int LessonIndex { get; set; }
+        public int DisplayLessonIndex { get; set; }
         public string Subject { get; set; }
         public string Teacher { get; set; }
         public string Classroom { get; set; }
@@ -172,6 +173,7 @@ namespace SchoolScheduleApp.ViewModels
             if (SelectedClassId <= 0) return;
 
             using var db = new SchoolDbContext();
+            int shift = GetClassShift(db);
 
             var lessons = db.Lessons
                 .Include(x => x.Subject)
@@ -188,6 +190,7 @@ namespace SchoolScheduleApp.ViewModels
                     Day = DayToText(l.DayOfWeek),
                     DayOfWeek = l.DayOfWeek,
                     LessonIndex = l.LessonIndex,
+                    DisplayLessonIndex = NormalizeLessonIndex(l.LessonIndex, shift),
                     Subject = l.Subject?.Name ?? "",
                     Teacher = l.Teacher?.FullName ?? "",
                     Classroom = l.Classroom != null ? l.Classroom.Number : "-"
@@ -203,6 +206,8 @@ namespace SchoolScheduleApp.ViewModels
 
             var cls = Classes.FirstOrDefault(c => c.Id == SelectedClassId);
             int shift = cls?.Shift ?? 1;
+            if (shift != 1 && shift != 2)
+                shift = 1;
 
             int start = shift == 1 ? 1 : 7;
             int end = shift == 1 ? 6 : 12;
@@ -248,6 +253,27 @@ namespace SchoolScheduleApp.ViewModels
                 5 => "Пятница",
                 _ => ""
             };
+        }
+
+        private int GetClassShift(SchoolDbContext db)
+        {
+            int shift = db.AcademicClasses
+                .Where(c => c.Id == SelectedClassId)
+                .Select(c => c.Shift)
+                .FirstOrDefault();
+
+            if (shift != 1 && shift != 2)
+                shift = 1;
+
+            return shift;
+        }
+
+        private int NormalizeLessonIndex(int lessonIndex, int shift)
+        {
+            if (shift == 2 && lessonIndex >= 7)
+                return lessonIndex - 6;
+
+            return lessonIndex;
         }
     }
 }

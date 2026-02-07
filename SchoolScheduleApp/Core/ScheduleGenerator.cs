@@ -138,6 +138,7 @@ namespace SchoolScheduleApp.Core
             }
 
             res.CreatedLessons = lessonsToCreate.Count;
+            ScheduleStatusNotifier.NotifyScheduleChanged();
             return res;
         }
 
