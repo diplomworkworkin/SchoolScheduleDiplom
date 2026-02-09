@@ -52,7 +52,17 @@
 
             <Style TargetType="ComboBoxItem" BasedOn="{StaticResource {x:Type ComboBoxItem}}">
                 <Setter Property="Foreground" Value="{DynamicResource PrimaryText}"/>
-                <Setter Property="Background" Value="{DynamicResource InputBackground}"/>
+                <Setter Property="Background" Value="{DynamicResource PopupBackground}"/>
+                <Setter Property="BorderBrush" Value="{DynamicResource PopupBorder}"/>
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Background" Value="{DynamicResource PopupItemHoverBackground}"/>
+                    </Trigger>
+                    <Trigger Property="IsSelected" Value="True">
+                        <Setter Property="Background" Value="{DynamicResource PopupItemHoverBackground}"/>
+                        <Setter Property="Foreground" Value="{DynamicResource PrimaryText}"/>
+                    </Trigger>
+                </Style.Triggers>
             </Style>
 
             <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">

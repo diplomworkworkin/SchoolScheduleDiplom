@@ -26,7 +26,7 @@
 
     <SolidColorBrush x:Key="HoverBackground" Color="#20FFFFFF"/>
     <SolidColorBrush x:Key="SidebarBorder" Color="#10FFFFFF"/>
-    <SolidColorBrush x:Key="InputBackground" Color="#15FFFFFF"/>
+    <SolidColorBrush x:Key="InputBackground" Color="#24343D"/>
     <SolidColorBrush x:Key="SelectedText" Color="White"/>
     <Color x:Key="LogoGlowColor">#00d2ff</Color>
 

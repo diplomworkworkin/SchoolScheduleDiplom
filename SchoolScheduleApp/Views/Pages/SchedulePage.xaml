@@ -223,9 +223,9 @@
                     <TabControl Grid.Row="0"
                                 Style="{StaticResource ScheduleTabControlStyle}"
                                 SelectedIndex="{Binding SelectedDayTabIndex, Mode=TwoWay}">
-                        <TabItem Header="Понедельник" Style="{StaticResource ScheduleTabItemStyle}"/>
-                        <TabItem Header="Вторник" Style="{StaticResource ScheduleTabItemStyle}"/>
-                        <TabItem Header="Среда" Style="{StaticResource ScheduleTabItemStyle}"/>
+                        <TabItem Header="Пн" Style="{StaticResource ScheduleTabItemStyle}"/>
+                        <TabItem Header="Вт" Style="{StaticResource ScheduleTabItemStyle}"/>
+                        <TabItem Header="Ср" Style="{StaticResource ScheduleTabItemStyle}"/>
                         <TabItem Header="Четверг" Style="{StaticResource ScheduleTabItemStyle}"/>
                         <TabItem Header="Пятница" Style="{StaticResource ScheduleTabItemStyle}"/>
                     </TabControl>

@@ -8,7 +8,8 @@
         Title="Панель Администратора" Height="720" Width="1200"
         MinHeight="600" MinWidth="980"
         WindowStartupLocation="CenterScreen"
-        ResizeMode="CanResize"
+        WindowStyle="None"
+        ResizeMode="NoResize"
         Background="{DynamicResource WindowBackground}">
 
     <Window.DataContext>
@@ -83,10 +84,6 @@
                                 </Ellipse>
                             </StackPanel>
                         </Border>
-                        <Button Content="−" Width="40" Height="40" Background="Transparent" Foreground="{DynamicResource SecondaryText}" FontSize="20" BorderThickness="0"
-                                Cursor="Hand" Click="BtnMinimize_Click"/>
-                        <Button Content="✕" Width="40" Height="40" Background="Transparent" Foreground="{DynamicResource SecondaryText}" FontSize="18" BorderThickness="0"
-                                Cursor="Hand" Click="BtnClose_Click"/>
                     </StackPanel>
                 </Grid>
 
