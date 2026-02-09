@@ -46,8 +46,10 @@
 
             <Style TargetType="ComboBox" BasedOn="{StaticResource {x:Type ComboBox}}">
                 <Setter Property="Foreground" Value="{DynamicResource PrimaryText}"/>
+                <Setter Property="TextElement.Foreground" Value="{DynamicResource PrimaryText}"/>
                 <Setter Property="Background" Value="{DynamicResource InputBackground}"/>
                 <Setter Property="BorderBrush" Value="{DynamicResource CardBorder}"/>
+                <Setter Property="FontSize" Value="13"/>
             </Style>
 
             <Style TargetType="ComboBoxItem" BasedOn="{StaticResource {x:Type ComboBoxItem}}">
@@ -59,8 +61,8 @@
                         <Setter Property="Background" Value="{DynamicResource PopupItemHoverBackground}"/>
                     </Trigger>
                     <Trigger Property="IsSelected" Value="True">
-                        <Setter Property="Background" Value="{DynamicResource PopupItemHoverBackground}"/>
-                        <Setter Property="Foreground" Value="{DynamicResource PrimaryText}"/>
+                        <Setter Property="Background" Value="{DynamicResource AccentColor}"/>
+                        <Setter Property="Foreground" Value="White"/>
                     </Trigger>
                 </Style.Triggers>
             </Style>
