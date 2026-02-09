@@ -1,11 +1,10 @@
-﻿using SchoolSchedule.Context;
+﻿using Microsoft.EntityFrameworkCore;
+using SchoolSchedule.Context;
+using SchoolSchedule.Entites;
 using SchoolScheduleApp.Core;
 using SchoolScheduleApp.Views;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -48,36 +47,51 @@ namespace SchoolScheduleApp.ViewModels
                 return;
             }
 
-            // Проверка в Базе Данных
-            using (var db = new SchoolDbContext())
+            try
             {
-                var user = db.Users.FirstOrDefault(u => u.Username == Username && u.Password == password);
+                using var db = new SchoolDbContext();
+                var user = db.Users
+                    .Include(u => u.Teacher)
+                    .Include(u => u.AcademicClass)
+                    .FirstOrDefault(u => u.Username == Username && u.Password == password);
 
-                if (user != null)
-                {
-                    ErrorMessage = "";
-
-                    // Успешный вход!
-                    // Открываем главное окно (пока заглушка, сделаем на след. шаге)
-                    MessageBox.Show($"Добро пожаловать, {user.FullName}!", "Успех");
-
-                    // TODO: Здесь будет открытие MainWindow
-                    var adminWindow = new AdminWindow();
-                    adminWindow.Show();
-
-                    // Закрываем текущее окно (через хак, так как VM не должна знать об окнах)
-                    foreach (Window window in Application.Current.Windows)
-                    {
-                        if (window.DataContext == this)
-                        {
-                             window.Close(); // Раскомментируем, когда будет главное окно
-                        }
-                    }
-                }
-                else
+                if (user == null)
                 {
                     ErrorMessage = "Неверный логин или пароль";
+                    return;
                 }
+
+                ErrorMessage = "";
+                UserSession.SetUser(user);
+                AppLogger.LogInfo($"Вход в систему: {user.Username} ({user.Role})");
+
+                Window? nextWindow = user.Role switch
+                {
+                    UserRole.Admin => new AdminWindow(),
+                    UserRole.Teacher => new TeacherWindow(),
+                    UserRole.Student => new StudentWindow(),
+                    _ => null
+                };
+
+                if (nextWindow == null)
+                {
+                    ErrorMessage = "Роль пользователя не поддерживается.";
+                    return;
+                }
+
+                MessageBox.Show($"Добро пожаловать, {user.FullName}!", "Успех");
+                nextWindow.Show();
+
+                foreach (Window window in Application.Current.Windows)
+                {
+                    if (window.DataContext == this)
+                        window.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                AppLogger.LogError("Ошибка авторизации.", ex);
+                ErrorMessage = "Произошла ошибка входа. Проверьте подключение к базе.";
             }
         }
     }

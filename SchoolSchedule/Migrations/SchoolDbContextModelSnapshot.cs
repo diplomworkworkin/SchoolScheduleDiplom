@@ -253,12 +253,18 @@ namespace SchoolSchedule.Migrations
                         .HasMaxLength(150)
                         .HasColumnType("nvarchar(150)");
 
+                    b.Property<int?>("AcademicClassId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<int>("Role")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("TeacherId")
                         .HasColumnType("int");
 
                     b.Property<string>("Username")
@@ -268,16 +274,42 @@ namespace SchoolSchedule.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AcademicClassId");
+
+                    b.HasIndex("TeacherId");
+
                     b.ToTable("Users");
 
                     b.HasData(
                         new
                         {
                             Id = 1,
+                            AcademicClassId = null,
                             FullName = "Системный Администратор",
                             Password = "admin",
                             Role = 0,
+                            TeacherId = null,
                             Username = "admin"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            AcademicClassId = null,
+                            FullName = "Петров Петр Петрович",
+                            Password = "teacher1",
+                            Role = 1,
+                            TeacherId = 1,
+                            Username = "teacher1"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            AcademicClassId = 1,
+                            FullName = "Ученик 11-А",
+                            Password = "student1",
+                            Role = 2,
+                            TeacherId = null,
+                            Username = "student1"
                         });
                 });
 
@@ -397,6 +429,23 @@ namespace SchoolSchedule.Migrations
                         .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Subject");
+                });
+
+            modelBuilder.Entity("SchoolSchedule.Entites.User", b =>
+                {
+                    b.HasOne("SchoolSchedule.Entites.AcademicClass", "AcademicClass")
+                        .WithMany()
+                        .HasForeignKey("AcademicClassId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("SchoolSchedule.Entites.Teacher", "Teacher")
+                        .WithMany()
+                        .HasForeignKey("TeacherId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("AcademicClass");
+
+                    b.Navigation("Teacher");
                 });
 
             modelBuilder.Entity("SchoolSchedule.Entites.Workload", b =>

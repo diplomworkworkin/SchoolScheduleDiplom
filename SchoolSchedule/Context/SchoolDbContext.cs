@@ -66,6 +66,17 @@ namespace SchoolSchedule.Context
                 .HasIndex(x => new { x.ClassroomId, x.DayOfWeek, x.LessonIndex })
                 .IsUnique();
 
+            modelBuilder.Entity<User>()
+                .HasOne(u => u.Teacher)
+                .WithMany()
+                .HasForeignKey(u => u.TeacherId)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<User>()
+                .HasOne(u => u.AcademicClass)
+                .WithMany()
+                .HasForeignKey(u => u.AcademicClassId)
+                .OnDelete(DeleteBehavior.SetNull);
 
             modelBuilder.Entity<User>().HasData(new User
             {
@@ -103,6 +114,27 @@ namespace SchoolSchedule.Context
 
                  new Workload { Id = 3, AcademicClassId = 2, TeacherId = 1, SubjectId = 1, HoursPerWeek = 4 },
                  new Workload { Id = 4, AcademicClassId = 2, TeacherId = 2, SubjectId = 2, HoursPerWeek = 3 }
+            );
+
+            modelBuilder.Entity<User>().HasData(
+                new User
+                {
+                    Id = 2,
+                    Username = "teacher1",
+                    Password = "teacher1",
+                    FullName = "Петров Петр Петрович",
+                    Role = UserRole.Teacher,
+                    TeacherId = 1
+                },
+                new User
+                {
+                    Id = 3,
+                    Username = "student1",
+                    Password = "student1",
+                    FullName = "Ученик 11-А",
+                    Role = UserRole.Student,
+                    AcademicClassId = 1
+                }
             );
 
         }

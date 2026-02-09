@@ -9,18 +9,15 @@ using System.Windows.Navigation;
 
 namespace SchoolScheduleApp.Views
 {
-    public partial class AdminWindow : Window
+    public partial class TeacherWindow : Window
     {
-        public AdminWindow()
+        public TeacherWindow()
         {
             InitializeComponent();
 
-            // Небольшая анимация при переходе между страницами (приятный "вау" эффект)
             MainFrame.Navigated += MainFrame_Navigated;
+            NavigateTo(new TeacherSchedulePage(), "Моё расписание");
 
-            NavigateTo(new DashboardPage(), "Обзор системы");
-
-            // Перетаскивание окна (WindowStyle=None)
             MouseDown += (_, e) =>
             {
                 if (e.LeftButton == MouseButtonState.Pressed)
@@ -44,29 +41,17 @@ namespace SchoolScheduleApp.Views
             page.BeginAnimation(OpacityProperty, anim);
         }
 
-        public void NavigateTo(Page page, string title)
+        private void NavigateTo(Page page, string title)
         {
             MainFrame.Navigate(page);
             PageTitle.Text = title;
         }
 
-        private void BtnDashboard_Click(object sender, RoutedEventArgs e)
-            => NavigateTo(new DashboardPage(), "Обзор системы");
-
         private void BtnSchedule_Click(object sender, RoutedEventArgs e)
-            => NavigateTo(new SchedulePage(), "Управление расписанием");
-
-        private void BtnTeachers_Click(object sender, RoutedEventArgs e)
-            => NavigateTo(new TeachersPage(), "Справочник учителей");
-
-        private void BtnStudents_Click(object sender, RoutedEventArgs e)
-            => NavigateTo(new StudentsPage(), "База данных учащихся");
-
-        private void BtnWorkloads_Click(object sender, RoutedEventArgs e)
-            => NavigateTo(new WorkloadsPage(), "Учебная нагрузка");
+            => NavigateTo(new TeacherSchedulePage(), "Моё расписание");
 
         private void BtnSettings_Click(object sender, RoutedEventArgs e)
-            => NavigateTo(new SettingsPage(), "Настройки системы");
+            => NavigateTo(new SettingsPage(), "Настройки");
 
         private void BtnClose_Click(object sender, RoutedEventArgs e)
             => Application.Current.Shutdown();

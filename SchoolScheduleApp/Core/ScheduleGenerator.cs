@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SchoolSchedule.Context;
 using SchoolSchedule.Entites;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -17,11 +18,17 @@ namespace SchoolScheduleApp.Core
         private const int DaysPerWeek = 5;
         private const int LessonsPerShift = 6; // в смене 6 уроков
 
+        public static event Action? ScheduleChanged;
+
         public static ScheduleGenerateResult Generate(bool clearOldSchedule = true)
         {
-            var res = new ScheduleGenerateResult();
-
             using var db = new SchoolDbContext();
+            return Generate(db, clearOldSchedule);
+        }
+
+        public static ScheduleGenerateResult Generate(SchoolDbContext db, bool clearOldSchedule = true)
+        {
+            var res = new ScheduleGenerateResult();
 
             var workloads = db.Workloads
                 .Include(w => w.Subject)
@@ -138,7 +145,13 @@ namespace SchoolScheduleApp.Core
             }
 
             res.CreatedLessons = lessonsToCreate.Count;
+            NotifyScheduleChanged();
             return res;
+        }
+
+        private static void NotifyScheduleChanged()
+        {
+            ScheduleChanged?.Invoke();
         }
 
         private static bool TryPlace(

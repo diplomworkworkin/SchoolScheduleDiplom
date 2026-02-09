@@ -33,6 +33,14 @@ namespace SchoolSchedule.Entites
         [MaxLength(150)]
         public string FullName { get; set; } // ФИО (например: "Петрова Анна Ивановна")
 
+        // Привязка к учителю (если роль Teacher)
+        public int? TeacherId { get; set; }
+        public Teacher? Teacher { get; set; }
+
+        // Привязка к классу (если роль Student)
+        public int? AcademicClassId { get; set; }
+        public AcademicClass? AcademicClass { get; set; }
+
         public UserRole Role { get; set; }
     }
 }

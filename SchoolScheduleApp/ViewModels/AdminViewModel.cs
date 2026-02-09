@@ -66,9 +66,21 @@ namespace SchoolScheduleApp.ViewModels
 
         public AdminViewModel()
         {
-            RefreshRoomLoadCommand = new RelayCommand(_ => LoadRoomLoadChart());
+            RefreshRoomLoadCommand = new RelayCommand(_ =>
+            {
+                LoadDashboardData();
+                LoadRoomLoadChart();
+            });
+
+            ScheduleGenerator.ScheduleChanged += OnScheduleChanged;
 
             // 2. Загрузка данных из БД
+            LoadDashboardData();
+            LoadRoomLoadChart();
+        }
+
+        private void OnScheduleChanged()
+        {
             LoadDashboardData();
             LoadRoomLoadChart();
         }

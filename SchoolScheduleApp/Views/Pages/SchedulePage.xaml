@@ -106,28 +106,50 @@
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Padding" Value="0"/>
+            <Setter Property="TabStripPlacement" Value="Top"/>
+            <Setter Property="Margin" Value="0,0,0,4"/>
+            <Setter Property="MinHeight" Value="34"/>
+            <Setter Property="Panel.ZIndex" Value="2"/>
         </Style>
 
         <Style x:Key="ScheduleTabItemStyle" TargetType="TabItem">
-            <Setter Property="Foreground" Value="{DynamicResource SecondaryText}"/>
+            <Setter Property="Foreground" Value="{DynamicResource PrimaryText}"/>
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Padding" Value="10,6"/>
             <Setter Property="Margin" Value="0,0,14,0"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="MinWidth" Value="120"/>
+            <Setter Property="Height" Value="32"/>
+            <Setter Property="Opacity" Value="0.85"/>
+            <Setter Property="HeaderTemplate">
+                <Setter.Value>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding}"
+                                   Foreground="{Binding RelativeSource={RelativeSource AncestorType=TabItem}, Path=Foreground}"
+                                   FontSize="{Binding RelativeSource={RelativeSource AncestorType=TabItem}, Path=FontSize}"
+                                   FontWeight="{Binding RelativeSource={RelativeSource AncestorType=TabItem}, Path=FontWeight}"/>
+                    </DataTemplate>
+                </Setter.Value>
+            </Setter>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="TabItem">
                         <Grid>
-                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
                             <Border x:Name="Underline" Height="2" Background="Transparent"
                                     VerticalAlignment="Bottom" CornerRadius="2"/>
                         </Grid>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
                                 <Setter Property="Foreground" Value="{DynamicResource PrimaryText}"/>
+                                <Setter Property="Opacity" Value="1"/>
                             </Trigger>
                             <Trigger Property="IsSelected" Value="True">
                                 <Setter Property="Foreground" Value="{DynamicResource PrimaryText}"/>
+                                <Setter Property="Opacity" Value="1"/>
+                                <Setter Property="FontWeight" Value="Bold"/>
                                 <Setter TargetName="Underline" Property="Background" Value="{DynamicResource AccentColor}"/>
                             </Trigger>
                         </ControlTemplate.Triggers>

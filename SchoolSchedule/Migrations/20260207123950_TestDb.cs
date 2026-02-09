@@ -49,6 +49,8 @@ namespace SchoolSchedule.Migrations
                     Username = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Password = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     FullName = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
+                    TeacherId = table.Column<int>(type: "int", nullable: true),
+                    AcademicClassId = table.Column<int>(type: "int", nullable: true),
                     Role = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -196,8 +198,13 @@ namespace SchoolSchedule.Migrations
 
             migrationBuilder.InsertData(
                 table: "Users",
-                columns: new[] { "Id", "FullName", "Password", "Role", "Username" },
-                values: new object[] { 1, "Системный Администратор", "admin", 0, "admin" });
+                columns: new[] { "Id", "AcademicClassId", "FullName", "Password", "Role", "TeacherId", "Username" },
+                values: new object[,]
+                {
+                    { 1, null, "Системный Администратор", "admin", 0, null, "admin" },
+                    { 2, null, "Петров Петр Петрович", "teacher1", 1, 1, "teacher1" },
+                    { 3, 1, "Ученик 11-А", "student1", 2, null, "student1" }
+                });
 
             migrationBuilder.InsertData(
                 table: "Teachers",
@@ -265,6 +272,16 @@ namespace SchoolSchedule.Migrations
                 column: "SubjectId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Users_AcademicClassId",
+                table: "Users",
+                column: "AcademicClassId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_TeacherId",
+                table: "Users",
+                column: "TeacherId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Workloads_AcademicClassId",
                 table: "Workloads",
                 column: "AcademicClassId");
@@ -278,6 +295,22 @@ namespace SchoolSchedule.Migrations
                 name: "IX_Workloads_TeacherId",
                 table: "Workloads",
                 column: "TeacherId");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Users_AcademicClasses_AcademicClassId",
+                table: "Users",
+                column: "AcademicClassId",
+                principalTable: "AcademicClasses",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.SetNull);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Users_Teachers_TeacherId",
+                table: "Users",
+                column: "TeacherId",
+                principalTable: "Teachers",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.SetNull);
         }
 
         /// <inheritdoc />
