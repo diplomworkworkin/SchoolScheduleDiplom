@@ -45,21 +45,21 @@
             -->
 
             <Style TargetType="ComboBox" BasedOn="{StaticResource {x:Type ComboBox}}">
-                <Setter Property="Foreground" Value="{DynamicResource PrimaryText}"/>
-                <Setter Property="Background" Value="{DynamicResource InputBackground}"/>
-                <Setter Property="BorderBrush" Value="{DynamicResource CardBorder}"/>
+                <Setter Property="Foreground" Value="#1F1F1F"/>
+                <Setter Property="Background" Value="#F3F5F7"/>
+                <Setter Property="BorderBrush" Value="#CCD3D9"/>
             </Style>
 
             <Style TargetType="ComboBoxItem" BasedOn="{StaticResource {x:Type ComboBoxItem}}">
-                <Setter Property="Foreground" Value="{DynamicResource PrimaryText}"/>
-                <Setter Property="Background" Value="{DynamicResource CardBackground}"/>
+                <Setter Property="Foreground" Value="#1F1F1F"/>
+                <Setter Property="Background" Value="#FFFFFF"/>
                 <Style.Triggers>
                     <Trigger Property="IsMouseOver" Value="True">
-                        <Setter Property="Background" Value="{DynamicResource HoverBackground}"/>
+                        <Setter Property="Background" Value="#EAF5FF"/>
                     </Trigger>
                     <Trigger Property="IsSelected" Value="True">
                         <Setter Property="Background" Value="{DynamicResource AccentColor}"/>
-                        <Setter Property="Foreground" Value="White"/>
+                        <Setter Property="Foreground" Value="#10212B"/>
                     </Trigger>
                 </Style.Triggers>
             </Style>

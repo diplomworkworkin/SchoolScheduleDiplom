@@ -27,7 +27,7 @@
     <SolidColorBrush x:Key="HoverBackground" Color="#E6F7FF"/>
     <SolidColorBrush x:Key="SidebarBorder" Color="#E0E0E0"/>
     <SolidColorBrush x:Key="InputBackground" Color="#FFFFFF"/>
-    <SolidColorBrush x:Key="SelectedText" Color="Black"/>
+    <SolidColorBrush x:Key="SelectedText" Color="#10212B"/>
     <Color x:Key="LogoGlowColor">#007ACC</Color>
 
     <!-- Выпадающие списки (ComboBox Popup) -->
