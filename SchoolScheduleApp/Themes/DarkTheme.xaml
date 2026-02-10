@@ -27,14 +27,14 @@
     <SolidColorBrush x:Key="HoverBackground" Color="#20FFFFFF"/>
     <SolidColorBrush x:Key="SidebarBorder" Color="#10FFFFFF"/>
     <SolidColorBrush x:Key="InputBackground" Color="#15FFFFFF"/>
-    <SolidColorBrush x:Key="SelectedText" Color="White"/>
+    <SolidColorBrush x:Key="SelectedText" Color="#10212B"/>
     <Color x:Key="LogoGlowColor">#00d2ff</Color>
 
     <!-- Выпадающие списки (ComboBox Popup) -->
-    <!-- Важно: InputBackground в темной теме светлый, поэтому для Popup используем более темный фон -->
-    <SolidColorBrush x:Key="PopupBackground" Color="#24343D"/>
-    <SolidColorBrush x:Key="PopupBorder" Color="#35FFFFFF"/>
-    <SolidColorBrush x:Key="PopupItemHoverBackground" Color="#2FFFFFFF"/>
+    <!-- Popup у ComboBox оставляем светлым, чтобы темный текст читался в любой теме -->
+    <SolidColorBrush x:Key="PopupBackground" Color="#FFFFFF"/>
+    <SolidColorBrush x:Key="PopupBorder" Color="#CCD3D9"/>
+    <SolidColorBrush x:Key="PopupItemHoverBackground" Color="#EAF5FF"/>
 
     <!-- MaterialDesign: привязка базовых кистей к нашей теме -->
     <SolidColorBrush x:Key="MaterialDesignPaper" Color="#0f2027"/>
