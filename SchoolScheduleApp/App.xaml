@@ -59,7 +59,7 @@
                     </Trigger>
                     <Trigger Property="IsSelected" Value="True">
                         <Setter Property="Background" Value="{DynamicResource AccentColor}"/>
-                        <Setter Property="Foreground" Value="White"/>
+                        <Setter Property="Foreground" Value="{DynamicResource SelectedText}"/>
                     </Trigger>
                 </Style.Triggers>
             </Style>
