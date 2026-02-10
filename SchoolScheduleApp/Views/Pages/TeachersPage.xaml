@@ -83,13 +83,34 @@
                     <DataGridTextColumn Header="ФИО Преподавателя" Binding="{Binding FullName}" Width="*"/>
 
                     <!-- Предмет учителя (через навигационное свойство) -->
-                    <DataGridTextColumn Header="Предмет" Binding="{Binding Subject.Name}" Width="220"/>
+                    <DataGridTextColumn Header="Предмет" Binding="{Binding SubjectName}" Width="220"/>
 
                     <DataGridTemplateColumn Header="Статус" Width="150">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <Border Background="#2000ff9d" CornerRadius="5" Padding="10,2" HorizontalAlignment="Left">
-                                    <TextBlock Text="Активен" Foreground="#00ff9d" FontSize="12" FontWeight="Bold"/>
+                                <Border CornerRadius="5" Padding="10,2" HorizontalAlignment="Left">
+                                    <Border.Style>
+                                        <Style TargetType="Border">
+                                            <Setter Property="Background" Value="#20FF4D4D"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsActive}" Value="True">
+                                                    <Setter Property="Background" Value="#2000FF9D"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Border.Style>
+                                    <TextBlock Text="{Binding StatusText}" FontSize="12" FontWeight="Bold">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="Foreground" Value="#FF4D4D"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsActive}" Value="True">
+                                                        <Setter Property="Foreground" Value="#00FF9D"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
                                 </Border>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>

@@ -9,10 +9,19 @@ using System.Windows;
 
 namespace SchoolScheduleApp.ViewModels
 {
+    public class TeacherRow
+    {
+        public int Id { get; set; }
+        public string FullName { get; set; } = string.Empty;
+        public string SubjectName { get; set; } = string.Empty;
+        public bool IsActive { get; set; }
+        public string StatusText => IsActive ? "Активен" : "Неактивен";
+    }
+
     public class TeachersViewModel : ViewModelBase
     {
-        private ObservableCollection<Teacher> _teachersList = new();
-        public ObservableCollection<Teacher> TeachersList
+        private ObservableCollection<TeacherRow> _teachersList = new();
+        public ObservableCollection<TeacherRow> TeachersList
         {
             get => _teachersList;
             set { _teachersList = value; OnPropertyChanged(); }
@@ -25,8 +34,8 @@ namespace SchoolScheduleApp.ViewModels
         public TeachersViewModel()
         {
             AddCommand = new RelayCommand(_ => ExecuteAdd());
-            EditCommand = new RelayCommand(o => ExecuteEdit(o as Teacher));
-            DeleteCommand = new RelayCommand(o => ExecuteDelete(o as Teacher));
+            EditCommand = new RelayCommand(o => ExecuteEdit(o as TeacherRow));
+            DeleteCommand = new RelayCommand(o => ExecuteDelete(o as TeacherRow));
 
             LoadData();
         }
@@ -35,58 +44,74 @@ namespace SchoolScheduleApp.ViewModels
         {
             using var db = new SchoolDbContext();
 
-            // Важно: Include нужен, чтобы в таблице был Subject.Name
-            var list = db.Teachers
+            var activeTeacherIds = db.Workloads
+                .Select(w => w.TeacherId)
+                .Distinct()
+                .ToHashSet();
+
+            foreach (var userTeacherId in db.Users
+                         .Where(u => u.TeacherId != null)
+                         .Select(u => u.TeacherId!.Value)
+                         .Distinct())
+            {
+                activeTeacherIds.Add(userTeacherId);
+            }
+
+            var teacherRows = db.Teachers
                 .Include(t => t.Subject)
                 .OrderBy(t => t.FullName)
+                .ToList()
+                .Select(t => new TeacherRow
+                {
+                    Id = t.Id,
+                    FullName = t.FullName,
+                    SubjectName = t.Subject?.Name ?? "-",
+                    IsActive = activeTeacherIds.Contains(t.Id)
+                })
                 .ToList();
 
-            TeachersList = new ObservableCollection<Teacher>(list);
+            TeachersList = new ObservableCollection<TeacherRow>(teacherRows);
         }
 
         private void ExecuteAdd()
         {
-            var newTeacher = new Teacher();
-            var wnd = new TeacherEditWindow(newTeacher);
+            var wnd = new TeacherEditWindow(new Teacher());
 
             if (wnd.ShowDialog() == true)
             {
                 using var db = new SchoolDbContext();
                 db.Teachers.Add(wnd.Teacher);
                 db.SaveChanges();
-
                 LoadData();
             }
         }
 
-        private void ExecuteEdit(Teacher? teacher)
+        private void ExecuteEdit(TeacherRow? teacher)
         {
             if (teacher == null) return;
 
-            // Работаем с копией, чтобы "Отмена" не портила строку в таблице
+            using var db = new SchoolDbContext();
+            var fromDb = db.Teachers.FirstOrDefault(t => t.Id == teacher.Id);
+            if (fromDb == null) return;
+
             var editable = new Teacher
             {
-                Id = teacher.Id,
-                FullName = teacher.FullName,
-                SubjectId = teacher.SubjectId
+                Id = fromDb.Id,
+                FullName = fromDb.FullName,
+                SubjectId = fromDb.SubjectId
             };
 
             var wnd = new TeacherEditWindow(editable);
-            if (wnd.ShowDialog() == true)
-            {
-                using var db = new SchoolDbContext();
-                var fromDb = db.Teachers.FirstOrDefault(t => t.Id == editable.Id);
-                if (fromDb == null) return;
+            if (wnd.ShowDialog() != true) return;
 
-                fromDb.FullName = editable.FullName;
-                fromDb.SubjectId = editable.SubjectId;
+            fromDb.FullName = editable.FullName;
+            fromDb.SubjectId = editable.SubjectId;
+            db.SaveChanges();
 
-                db.SaveChanges();
-                LoadData();
-            }
+            LoadData();
         }
 
-        private void ExecuteDelete(Teacher? teacher)
+        private void ExecuteDelete(TeacherRow? teacher)
         {
             if (teacher == null) return;
 

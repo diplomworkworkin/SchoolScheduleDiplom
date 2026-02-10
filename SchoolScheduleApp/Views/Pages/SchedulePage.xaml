@@ -1,7 +1,7 @@
 <Page x:Class="SchoolScheduleApp.Views.Pages.SchedulePage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-	      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-	      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       mc:Ignorable="d"
@@ -33,41 +33,14 @@
             </Setter>
         </Style>
 
-        
-        
-        <!-- Фон карточек -->
-        <Style x:Key="LessonCard" TargetType="Border">
-            <Setter Property="Background" Value="{DynamicResource InputBackground}"/>
-            <Setter Property="BorderBrush" Value="{DynamicResource CardBorder}"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="CornerRadius" Value="8"/>
-            <Setter Property="Padding" Value="10"/>
-            <Setter Property="Margin" Value="5,0,5,10"/>
-        </Style>
-
         <!-- Стиль ComboBox, чтобы в темной теме текст был читаем -->
         <!-- Важно: BasedOn подтягивает общий шаблон ComboBox из App.xaml (с правильным Popup) -->
         <Style x:Key="TopComboBoxStyle" TargetType="ComboBox" BasedOn="{StaticResource {x:Type ComboBox}}">
             <Setter Property="Height" Value="34"/>
             <Setter Property="Padding" Value="8,0"/>
-            <Setter Property="Background" Value="{DynamicResource InputBackground}"/>
-            <Setter Property="BorderBrush" Value="{DynamicResource CardBorder}"/>
-            <Setter Property="Foreground" Value="{DynamicResource PrimaryText}"/>
-        </Style>
-
-        <!-- Читабельная таблица даже в темной теме -->
-        <Style x:Key="ScheduleGridStyle" TargetType="DataGrid">
-            <Setter Property="Background" Value="{DynamicResource InputBackground}"/>
-            <Setter Property="Foreground" Value="{DynamicResource PrimaryText}"/>
-            <Setter Property="RowBackground" Value="{DynamicResource InputBackground}"/>
-            <Setter Property="AlternatingRowBackground" Value="{DynamicResource CardBackground}"/>
-            <Setter Property="GridLinesVisibility" Value="Horizontal"/>
-            <Setter Property="HeadersVisibility" Value="Column"/>
-            <Setter Property="BorderBrush" Value="{DynamicResource CardBorder}"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="CanUserResizeRows" Value="False"/>
-            <Setter Property="SelectionUnit" Value="FullRow"/>
-            <Setter Property="SelectionMode" Value="Single"/>
+            <Setter Property="Background" Value="#F3F5F7"/>
+            <Setter Property="BorderBrush" Value="#CCD3D9"/>
+            <Setter Property="Foreground" Value="#1F1F1F"/>
         </Style>
 
         <Style TargetType="DataGridColumnHeader">
@@ -96,7 +69,7 @@
         </Style>
 
         <Style TargetType="DataGridCell">
-            <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=Foreground}"/>
+            <Setter Property="Foreground" Value="{DynamicResource PrimaryText}"/>
             <Setter Property="Padding" Value="10,6"/>
             <Setter Property="BorderThickness" Value="0"/>
         </Style>
@@ -122,7 +95,7 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="TabItem">
                         <Grid>
-                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <ContentPresenter ContentSource="Header" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             <Border x:Name="Underline" Height="2" Background="Transparent"
                                     VerticalAlignment="Bottom" CornerRadius="2"/>
                         </Grid>
@@ -230,6 +203,60 @@
                         <TabItem Header="Пятница" Style="{StaticResource ScheduleTabItemStyle}"/>
                     </TabControl>
 
+                    <Border Grid.Row="0"
+                            HorizontalAlignment="Right"
+                            Padding="10,8"
+                            Margin="0,0,0,4"
+                            CornerRadius="8"
+                            Background="{DynamicResource CardBackground}"
+                            BorderBrush="{DynamicResource CardBorder}"
+                            BorderThickness="1">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="Кабинет урока:"
+                                       Foreground="{DynamicResource SecondaryText}"
+                                       VerticalAlignment="Center"
+                                       Margin="0,0,8,0"/>
+                            <ComboBox Style="{StaticResource TopComboBoxStyle}"
+                                      Width="150"
+                                      ItemsSource="{Binding Classrooms}"
+                                      DisplayMemberPath="Number"
+                                      SelectedValuePath="Id"
+                                      SelectedValue="{Binding SelectedClassroomId}"/>
+                            <Button Content="Применить"
+                                    Command="{Binding SaveClassroomForLessonCommand}"
+                                    Margin="8,0,0,0"
+                                    Padding="10,4"
+                                    Background="{DynamicResource AccentColor}"
+                                    Foreground="White"
+                                    BorderThickness="0"
+                                    Cursor="Hand"/>
+                            <TextBox Width="95"
+                                     Margin="12,0,0,0"
+                                     Text="{Binding NewClassroomNumber, UpdateSourceTrigger=PropertyChanged}"
+                                     VerticalContentAlignment="Center"
+                                     ToolTip="Новый кабинет"/>
+                            <TextBox Width="90"
+                                     Margin="6,0,0,0"
+                                     Text="{Binding NewClassroomType, UpdateSourceTrigger=PropertyChanged}"
+                                     VerticalContentAlignment="Center"
+                                     ToolTip="Тип"/>
+                            <TextBox Width="55"
+                                     Margin="6,0,0,0"
+                                     Text="{Binding NewClassroomCapacity, UpdateSourceTrigger=PropertyChanged}"
+                                     VerticalContentAlignment="Center"
+                                     ToolTip="Вместимость"/>
+                            <Button Content="+ Кабинет"
+                                    Command="{Binding AddClassroomCommand}"
+                                    Margin="6,0,0,0"
+                                    Padding="10,4"
+                                    Background="Transparent"
+                                    Foreground="{DynamicResource AccentColor}"
+                                    BorderBrush="{DynamicResource AccentColor}"
+                                    BorderThickness="1"
+                                    Cursor="Hand"/>
+                        </StackPanel>
+                    </Border>
+
                     <!-- Табличный вид выбранного дня -->
                     <Border Grid.Row="1"
                             CornerRadius="14"
@@ -240,6 +267,7 @@
                             Margin="0,10,0,0">
 
                     <DataGrid ItemsSource="{Binding ScheduleTable}"
+                              SelectedItem="{Binding SelectedLesson}"
                               Style="{StaticResource WowDataGrid}"
                               materialDesign:DataGridAssist.CellPadding="10,6"
                               materialDesign:DataGridAssist.ColumnHeaderPadding="10,8"
