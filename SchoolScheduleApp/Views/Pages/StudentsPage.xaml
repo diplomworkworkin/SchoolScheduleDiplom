@@ -57,7 +57,9 @@
                       AlternatingRowBackground="{DynamicResource HoverBackground}"
                       Foreground="{DynamicResource PrimaryText}"
                       AutoGenerateColumns="False" CanUserAddRows="False"
-                      RowHeight="45" ColumnHeaderHeight="45">
+                      RowHeight="45" ColumnHeaderHeight="45"
+                      PreviewMouseDown="NonInteractiveGrid_PreviewMouseDown"
+                      PreviewKeyDown="NonInteractiveGrid_PreviewKeyDown">
 
                 <DataGrid.Resources>
                     <Style TargetType="DataGridColumnHeader">

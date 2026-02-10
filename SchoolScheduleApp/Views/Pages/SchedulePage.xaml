@@ -164,6 +164,17 @@
                         </StackPanel>
                     </Border>
 
+                    <Button Content="✎ Ручное редактирование"
+                            Margin="0,0,10,0"
+                            Padding="14,10"
+                            BorderThickness="1"
+                            BorderBrush="{DynamicResource AccentColor}"
+                            Background="Transparent"
+                            Foreground="{DynamicResource AccentColor}"
+                            FontWeight="SemiBold"
+                            Cursor="Hand"
+                            Click="BtnManualEdit_Click"/>
+
                     <!-- КНОПКА АВТОСОСТАВЛЕНИЯ -->
                     <Button Content="⚡ Авто-составление"
                             Command="{Binding AutoGenerateScheduleCommand}"
@@ -203,60 +214,6 @@
                         <TabItem Header="Пятница" Style="{StaticResource ScheduleTabItemStyle}"/>
                     </TabControl>
 
-                    <Border Grid.Row="0"
-                            HorizontalAlignment="Right"
-                            Padding="10,8"
-                            Margin="0,0,0,4"
-                            CornerRadius="8"
-                            Background="{DynamicResource CardBackground}"
-                            BorderBrush="{DynamicResource CardBorder}"
-                            BorderThickness="1">
-                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                            <TextBlock Text="Кабинет урока:"
-                                       Foreground="{DynamicResource SecondaryText}"
-                                       VerticalAlignment="Center"
-                                       Margin="0,0,8,0"/>
-                            <ComboBox Style="{StaticResource TopComboBoxStyle}"
-                                      Width="150"
-                                      ItemsSource="{Binding Classrooms}"
-                                      DisplayMemberPath="Number"
-                                      SelectedValuePath="Id"
-                                      SelectedValue="{Binding SelectedClassroomId}"/>
-                            <Button Content="Применить"
-                                    Command="{Binding SaveClassroomForLessonCommand}"
-                                    Margin="8,0,0,0"
-                                    Padding="10,4"
-                                    Background="{DynamicResource AccentColor}"
-                                    Foreground="White"
-                                    BorderThickness="0"
-                                    Cursor="Hand"/>
-                            <TextBox Width="95"
-                                     Margin="12,0,0,0"
-                                     Text="{Binding NewClassroomNumber, UpdateSourceTrigger=PropertyChanged}"
-                                     VerticalContentAlignment="Center"
-                                     ToolTip="Новый кабинет"/>
-                            <TextBox Width="90"
-                                     Margin="6,0,0,0"
-                                     Text="{Binding NewClassroomType, UpdateSourceTrigger=PropertyChanged}"
-                                     VerticalContentAlignment="Center"
-                                     ToolTip="Тип"/>
-                            <TextBox Width="55"
-                                     Margin="6,0,0,0"
-                                     Text="{Binding NewClassroomCapacity, UpdateSourceTrigger=PropertyChanged}"
-                                     VerticalContentAlignment="Center"
-                                     ToolTip="Вместимость"/>
-                            <Button Content="+ Кабинет"
-                                    Command="{Binding AddClassroomCommand}"
-                                    Margin="6,0,0,0"
-                                    Padding="10,4"
-                                    Background="Transparent"
-                                    Foreground="{DynamicResource AccentColor}"
-                                    BorderBrush="{DynamicResource AccentColor}"
-                                    BorderThickness="1"
-                                    Cursor="Hand"/>
-                        </StackPanel>
-                    </Border>
-
                     <!-- Табличный вид выбранного дня -->
                     <Border Grid.Row="1"
                             CornerRadius="14"
@@ -267,7 +224,6 @@
                             Margin="0,10,0,0">
 
                     <DataGrid ItemsSource="{Binding ScheduleTable}"
-                              SelectedItem="{Binding SelectedLesson}"
                               Style="{StaticResource WowDataGrid}"
                               materialDesign:DataGridAssist.CellPadding="10,6"
                               materialDesign:DataGridAssist.ColumnHeaderPadding="10,8"

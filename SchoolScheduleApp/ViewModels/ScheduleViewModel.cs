@@ -11,14 +11,12 @@ namespace SchoolScheduleApp.ViewModels
 {
     public class LessonRow
     {
-        public int LessonId { get; set; }
         public string Day { get; set; } = string.Empty;
         public int DayOfWeek { get; set; }
         public int LessonIndex { get; set; }
         public string Subject { get; set; } = string.Empty;
         public string Teacher { get; set; } = string.Empty;
         public string Classroom { get; set; } = string.Empty;
-        public int? ClassroomId { get; set; }
     }
 
     public class LessonSlot
@@ -34,84 +32,10 @@ namespace SchoolScheduleApp.ViewModels
     public class ScheduleViewModel : ViewModelBase
     {
         public RelayCommand AutoGenerateScheduleCommand { get; }
-        public RelayCommand SaveClassroomForLessonCommand { get; }
-        public RelayCommand AddClassroomCommand { get; }
 
         public ObservableCollection<AcademicClass> Classes { get; set; } = new();
-        public ObservableCollection<Classroom> Classrooms { get; set; } = new();
         public ObservableCollection<LessonSlot> DayGrid { get; set; } = new();
         public ObservableCollection<LessonRow> ScheduleTable { get; set; } = new();
-
-        private LessonRow? _selectedLesson;
-        public LessonRow? SelectedLesson
-        {
-            get => _selectedLesson;
-            set
-            {
-                _selectedLesson = value;
-                OnPropertyChanged();
-
-                SelectedClassroomId = value?.ClassroomId;
-            }
-        }
-
-        private int? _selectedClassroomId;
-        public int? SelectedClassroomId
-        {
-            get => _selectedClassroomId;
-            set { _selectedClassroomId = value; OnPropertyChanged(); }
-        }
-
-        private string _newClassroomNumber = string.Empty;
-        public string NewClassroomNumber
-        {
-            get => _newClassroomNumber;
-            set { _newClassroomNumber = value; OnPropertyChanged(); }
-        }
-
-        private string _newClassroomType = "Обычный";
-        public string NewClassroomType
-        {
-            get => _newClassroomType;
-            set { _newClassroomType = value; OnPropertyChanged(); }
-        }
-
-        private int _newClassroomCapacity = 30;
-        public int NewClassroomCapacity
-        {
-            get => _newClassroomCapacity;
-            set { _newClassroomCapacity = value; OnPropertyChanged(); }
-        }
-
-        private void LoadClasses()
-        {
-            using var db = new SchoolDbContext();
-
-            Classes = new ObservableCollection<AcademicClass>(
-                db.AcademicClasses.OrderBy(c => c.Name).ToList()
-            );
-            OnPropertyChanged(nameof(Classes));
-
-            if (Classes.Count > 0 && SelectedClassId <= 0)
-            {
-                SelectedClassId = Classes[0].Id;
-            }
-        }
-
-        private void LoadClassrooms()
-        {
-            using var db = new SchoolDbContext();
-
-            Classrooms = new ObservableCollection<Classroom>(
-                db.Classrooms.OrderBy(c => c.Number).ToList()
-            );
-            OnPropertyChanged(nameof(Classrooms));
-
-            if (Classrooms.Count > 0 && SelectedClassroomId == null)
-            {
-                SelectedClassroomId = Classrooms[0].Id;
-            }
-        }
 
         private int _selectedDay = 1;
         public int SelectedDay
@@ -127,14 +51,14 @@ namespace SchoolScheduleApp.ViewModels
                 var idx = _selectedDay - 1;
                 if (idx < 0) idx = 0;
                 if (idx > 4) idx = 4;
+
                 if (_selectedDayTabIndex != idx)
                 {
                     _selectedDayTabIndex = idx;
                     OnPropertyChanged(nameof(SelectedDayTabIndex));
                 }
 
-                LoadSchedule();
-                LoadDayGrid();
+                RefreshData();
             }
         }
 
@@ -157,8 +81,7 @@ namespace SchoolScheduleApp.ViewModels
                 {
                     _selectedDay = day;
                     OnPropertyChanged(nameof(SelectedDay));
-                    LoadSchedule();
-                    LoadDayGrid();
+                    RefreshData();
                 }
             }
         }
@@ -171,19 +94,35 @@ namespace SchoolScheduleApp.ViewModels
             {
                 _selectedClassId = value;
                 OnPropertyChanged();
-                LoadSchedule();
-                LoadDayGrid();
+                RefreshData();
             }
         }
 
         public ScheduleViewModel()
         {
             AutoGenerateScheduleCommand = new RelayCommand(_ => ExecuteAutoGenerate());
-            SaveClassroomForLessonCommand = new RelayCommand(_ => SaveClassroomForLesson());
-            AddClassroomCommand = new RelayCommand(_ => AddClassroom());
-
-            LoadClassrooms();
             LoadClasses();
+        }
+
+        public void RefreshData()
+        {
+            LoadSchedule();
+            LoadDayGrid();
+        }
+
+        private void LoadClasses()
+        {
+            using var db = new SchoolDbContext();
+
+            Classes = new ObservableCollection<AcademicClass>(
+                db.AcademicClasses.OrderBy(c => c.Name).ToList()
+            );
+            OnPropertyChanged(nameof(Classes));
+
+            if (Classes.Count > 0 && SelectedClassId <= 0)
+            {
+                SelectedClassId = Classes[0].Id;
+            }
         }
 
         private void ExecuteAutoGenerate()
@@ -195,12 +134,12 @@ namespace SchoolScheduleApp.ViewModels
                 MessageBoxImage.Question);
 
             if (confirm != MessageBoxResult.Yes)
+            {
                 return;
+            }
 
-            var res = ScheduleGenerator.Generate(clearOldSchedule: true);
-
-            LoadSchedule();
-            LoadDayGrid();
+            var result = ScheduleGenerator.Generate(clearOldSchedule: true);
+            RefreshData();
 
             int lessonsForSelectedClass;
             using (var db = new SchoolDbContext())
@@ -209,7 +148,7 @@ namespace SchoolScheduleApp.ViewModels
             }
 
             var sb = new StringBuilder();
-            sb.AppendLine($"Создано уроков всего: {res.CreatedLessons}");
+            sb.AppendLine($"Создано уроков всего: {result.CreatedLessons}");
             sb.AppendLine($"Уроков для выбранного класса: {lessonsForSelectedClass}");
 
             if (lessonsForSelectedClass == 0)
@@ -218,12 +157,14 @@ namespace SchoolScheduleApp.ViewModels
                 sb.AppendLine("Внимание: для выбранного класса нет нагрузки (Workloads) — поэтому расписание пустое.");
             }
 
-            if (res.Problems.Count > 0)
+            if (result.Problems.Count > 0)
             {
                 sb.AppendLine();
                 sb.AppendLine("Проблемы:");
-                foreach (var p in res.Problems)
-                    sb.AppendLine("• " + p);
+                foreach (var problem in result.Problems)
+                {
+                    sb.AppendLine("• " + problem);
+                }
             }
             else
             {
@@ -232,78 +173,6 @@ namespace SchoolScheduleApp.ViewModels
             }
 
             MessageBox.Show(sb.ToString(), "Результат", MessageBoxButton.OK, MessageBoxImage.Information);
-        }
-
-        private void SaveClassroomForLesson()
-        {
-            if (SelectedLesson == null)
-            {
-                MessageBox.Show("Выберите урок в таблице.", "Кабинет", MessageBoxButton.OK, MessageBoxImage.Information);
-                return;
-            }
-
-            if (SelectedClassroomId == null || SelectedClassroomId <= 0)
-            {
-                MessageBox.Show("Выберите кабинет.", "Кабинет", MessageBoxButton.OK, MessageBoxImage.Information);
-                return;
-            }
-
-            using var db = new SchoolDbContext();
-            var lesson = db.Lessons.FirstOrDefault(x => x.Id == SelectedLesson.LessonId);
-            if (lesson == null)
-            {
-                MessageBox.Show("Урок не найден. Обновите страницу.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
-
-            lesson.ClassroomId = SelectedClassroomId.Value;
-            db.SaveChanges();
-
-            LoadSchedule();
-            LoadDayGrid();
-        }
-
-        private void AddClassroom()
-        {
-            var number = (NewClassroomNumber ?? string.Empty).Trim();
-            if (string.IsNullOrWhiteSpace(number))
-            {
-                MessageBox.Show("Введите номер/название кабинета.", "Кабинет", MessageBoxButton.OK, MessageBoxImage.Information);
-                return;
-            }
-
-            if (NewClassroomCapacity <= 0)
-            {
-                MessageBox.Show("Вместимость должна быть больше 0.", "Кабинет", MessageBoxButton.OK, MessageBoxImage.Information);
-                return;
-            }
-
-            var type = string.IsNullOrWhiteSpace(NewClassroomType) ? "Обычный" : NewClassroomType.Trim();
-
-            using var db = new SchoolDbContext();
-            var exists = db.Classrooms.Any(x => x.Number.ToLower() == number.ToLower());
-            if (exists)
-            {
-                MessageBox.Show("Такой кабинет уже существует.", "Кабинет", MessageBoxButton.OK, MessageBoxImage.Information);
-                return;
-            }
-
-            var room = new Classroom
-            {
-                Number = number,
-                Type = type,
-                Capacity = NewClassroomCapacity
-            };
-
-            db.Classrooms.Add(room);
-            db.SaveChanges();
-
-            LoadClassrooms();
-            SelectedClassroomId = room.Id;
-
-            NewClassroomNumber = string.Empty;
-            NewClassroomType = "Обычный";
-            NewClassroomCapacity = 30;
         }
 
         private void LoadSchedule()
@@ -322,22 +191,18 @@ namespace SchoolScheduleApp.ViewModels
                 .OrderBy(x => x.LessonIndex)
                 .ToList();
 
-            foreach (var l in lessons)
+            foreach (var lesson in lessons)
             {
                 ScheduleTable.Add(new LessonRow
                 {
-                    LessonId = l.Id,
-                    Day = DayToText(l.DayOfWeek),
-                    DayOfWeek = l.DayOfWeek,
-                    LessonIndex = l.LessonIndex,
-                    Subject = l.Subject?.Name ?? string.Empty,
-                    Teacher = l.Teacher?.FullName ?? string.Empty,
-                    Classroom = l.Classroom?.Number ?? "-",
-                    ClassroomId = l.ClassroomId
+                    Day = DayToText(lesson.DayOfWeek),
+                    DayOfWeek = lesson.DayOfWeek,
+                    LessonIndex = lesson.LessonIndex,
+                    Subject = lesson.Subject?.Name ?? string.Empty,
+                    Teacher = lesson.Teacher?.FullName ?? string.Empty,
+                    Classroom = lesson.Classroom?.Number ?? "-"
                 });
             }
-
-            SelectedLesson = null;
         }
 
         private void LoadDayGrid()
@@ -346,8 +211,8 @@ namespace SchoolScheduleApp.ViewModels
 
             if (SelectedClassId <= 0) return;
 
-            var cls = Classes.FirstOrDefault(c => c.Id == SelectedClassId);
-            int shift = cls?.Shift ?? 1;
+            var selectedClass = Classes.FirstOrDefault(c => c.Id == SelectedClassId);
+            int shift = selectedClass?.Shift ?? 1;
 
             int start = shift == 1 ? 1 : 7;
             int end = shift == 1 ? 6 : 12;
@@ -361,28 +226,28 @@ namespace SchoolScheduleApp.ViewModels
                 .Where(x => x.AcademicClassId == SelectedClassId && x.DayOfWeek == SelectedDay)
                 .ToList();
 
-            int display = 1;
+            int displayIndex = 1;
             for (int idx = start; idx <= end; idx++)
             {
-                var l = lessons.FirstOrDefault(x => x.LessonIndex == idx);
+                var lesson = lessons.FirstOrDefault(x => x.LessonIndex == idx);
 
                 DayGrid.Add(new LessonSlot
                 {
-                    DisplayIndex = display,
+                    DisplayIndex = displayIndex,
                     RealLessonIndex = idx,
-                    HasLesson = l != null,
-                    Subject = l?.Subject?.Name ?? "Нет урока",
-                    Teacher = l?.Teacher?.FullName ?? string.Empty,
-                    Classroom = l?.Classroom?.Number ?? "-"
+                    HasLesson = lesson != null,
+                    Subject = lesson?.Subject?.Name ?? "Нет урока",
+                    Teacher = lesson?.Teacher?.FullName ?? string.Empty,
+                    Classroom = lesson?.Classroom?.Number ?? "-"
                 });
 
-                display++;
+                displayIndex++;
             }
 
             OnPropertyChanged(nameof(DayGrid));
         }
 
-        private string DayToText(int day)
+        private static string DayToText(int day)
         {
             return day switch
             {
