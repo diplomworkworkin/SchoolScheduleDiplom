@@ -54,6 +54,7 @@
                     <Button Content="👥   Учителя" Style="{StaticResource MenuButton}" Click="BtnTeachers_Click"/>
                     <Button Content="🎓   Ученики" Style="{StaticResource MenuButton}" Click="BtnStudents_Click"/>
                     <Button Content="📚   Нагрузка" Style="{StaticResource MenuButton}" Click="BtnWorkloads_Click"/>
+                    <Button x:Name="BtnMessages" Content="✉️   Сообщения" Style="{StaticResource MenuButton}" Click="BtnMessages_Click"/>
 
                     <TextBlock Text="СИСТЕМА" Foreground="{DynamicResource SecondaryText}" FontSize="10" Margin="30,30,0,10" FontWeight="Bold"/>
 

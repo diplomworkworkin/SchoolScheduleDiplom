@@ -6,11 +6,14 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
 using System.Windows.Navigation;
+using System.Windows.Threading;
 
 namespace SchoolScheduleApp.Views
 {
     public partial class TeacherWindow : Window
     {
+        private readonly DispatcherTimer _messagesTimer;
+
         public TeacherWindow()
         {
             InitializeComponent();
@@ -23,6 +26,14 @@ namespace SchoolScheduleApp.Views
                 if (e.LeftButton == MouseButtonState.Pressed)
                     DragMove();
             };
+
+            Activated += (_, _) => UpdateMessagesBadge();
+            _messagesTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(4) };
+            _messagesTimer.Tick += (_, _) => UpdateMessagesBadge();
+            _messagesTimer.Start();
+            Closed += (_, _) => _messagesTimer.Stop();
+
+            UpdateMessagesBadge();
         }
 
         private void MainFrame_Navigated(object sender, NavigationEventArgs e)
@@ -45,10 +56,14 @@ namespace SchoolScheduleApp.Views
         {
             MainFrame.Navigate(page);
             PageTitle.Text = title;
+            UpdateMessagesBadge();
         }
 
         private void BtnSchedule_Click(object sender, RoutedEventArgs e)
             => NavigateTo(new TeacherSchedulePage(), "Моё расписание");
+
+        private void BtnMessages_Click(object sender, RoutedEventArgs e)
+            => NavigateTo(new MessagesPage(), "Сообщения");
 
         private void BtnSettings_Click(object sender, RoutedEventArgs e)
             => NavigateTo(new SettingsPage(), "Настройки");
@@ -66,8 +81,22 @@ namespace SchoolScheduleApp.Views
         private void BtnLogout_Click(object sender, RoutedEventArgs e)
         {
             UserSession.Clear();
-            new MainWindow().Show();
+            var loginWindow = new MainWindow();
+            Application.Current.MainWindow = loginWindow;
+            loginWindow.Show();
             Close();
+        }
+
+        private void UpdateMessagesBadge()
+        {
+            var teacherId = UserSession.CurrentUser?.TeacherId;
+            var unread = teacherId.HasValue
+                ? MessageRequestService.GetUnreadTeacherCount(teacherId.Value)
+                : 0;
+
+            BtnMessages.Content = unread > 0
+                ? $"✉️   Сообщения ({unread})"
+                : "✉️   Сообщения";
         }
     }
 }

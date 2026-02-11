@@ -1,0 +1,131 @@
+﻿<Page x:Class="SchoolScheduleApp.Views.Pages.MessagesPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:vm="clr-namespace:SchoolScheduleApp.ViewModels"
+      mc:Ignorable="d"
+      d:DesignHeight="600" d:DesignWidth="900"
+      Title="MessagesPage">
+
+    <Page.DataContext>
+        <vm:MessagesViewModel/>
+    </Page.DataContext>
+
+    <Grid Margin="40,0,40,40">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <DockPanel Grid.Row="0" Margin="0,0,0,20">
+            <TextBlock Text="Сообщения" Foreground="{DynamicResource PrimaryText}" FontSize="24" FontWeight="Bold" VerticalAlignment="Center"/>
+            <Button Content="↻ Обновить"
+                    Command="{Binding RefreshCommand}"
+                    DockPanel.Dock="Right"
+                    Background="Transparent"
+                    Foreground="{DynamicResource AccentColor}"
+                    BorderBrush="{DynamicResource AccentColor}"
+                    BorderThickness="1"
+                    Padding="15,8"
+                    Cursor="Hand"/>
+        </DockPanel>
+
+        <Border Grid.Row="1" Margin="0,0,0,16" Style="{StaticResource GlassCard}" Padding="16" Visibility="{Binding IsTeacher, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="220"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="150"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Row="0" Grid.ColumnSpan="3" Text="Новое сообщение администратору" FontWeight="Bold" Foreground="{DynamicResource PrimaryText}" Margin="0,0,0,10"/>
+
+                <ComboBox Grid.Row="1" Grid.Column="0" Margin="0,0,10,0"
+                          ItemsSource="{Binding Categories}"
+                          DisplayMemberPath="Title"
+                          SelectedItem="{Binding SelectedCategoryOption}"/>
+
+                <TextBox Grid.Row="1" Grid.Column="1" Margin="0,0,10,0"
+                         Text="{Binding MessageBody, UpdateSourceTrigger=PropertyChanged}"
+                         VerticalContentAlignment="Center"
+                         Height="36"/>
+
+                <Button Grid.Row="1" Grid.Column="2"
+                        Content="Отправить"
+                        Command="{Binding SendCommand}"
+                        Background="{DynamicResource AccentColor}"
+                        Foreground="White"
+                        FontWeight="Bold"
+                        BorderThickness="0"
+                        Cursor="Hand"/>
+
+                <TextBlock Grid.Row="2" Grid.ColumnSpan="3" Margin="0,8,0,0" Foreground="{DynamicResource SecondaryText}" FontSize="12"
+                           Text="Категории: Замена урока / Внести изменения"/>
+            </Grid>
+        </Border>
+
+        <Border Grid.Row="2" Style="{StaticResource GlassCard}" Padding="0">
+            <DataGrid ItemsSource="{Binding Messages}"
+                      AutoGenerateColumns="False"
+                      IsReadOnly="True"
+                      CanUserAddRows="False"
+                      HeadersVisibility="Column"
+                      Background="Transparent"
+                      BorderThickness="0"
+                      RowHeight="46"
+                      ColumnHeaderHeight="46"
+                      HorizontalGridLinesBrush="{DynamicResource CardBorder}"
+                      VerticalGridLinesBrush="{DynamicResource CardBorder}">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Отправитель" Binding="{Binding TeacherName}" Width="170"/>
+                    <DataGridTextColumn Header="Категория" Binding="{Binding CategoryText}" Width="170"/>
+                    <DataGridTextColumn Header="Сообщение" Binding="{Binding Body}" Width="*"/>
+                    <DataGridTemplateColumn Header="Статус" Width="130">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding StatusText}" Foreground="{Binding StatusBrush}" FontWeight="Bold"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn Header="Создано" Binding="{Binding CreatedAtText}" Width="145"/>
+                    <DataGridTextColumn Header="Обработано" Binding="{Binding ProcessedAtText}" Width="145"/>
+                    <DataGridTextColumn Header="Комментарий" Binding="{Binding AdminComment}" Width="220"/>
+                    <DataGridTemplateColumn Header="Действия" Width="190">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <Button Content="Принять"
+                                            Command="{Binding DataContext.ApproveCommand, RelativeSource={RelativeSource AncestorType=Page}}"
+                                            CommandParameter="{Binding}"
+                                            Margin="0,0,8,0"
+                                            Background="#2e7d32"
+                                            Foreground="White"
+                                            BorderThickness="0"
+                                            Padding="8,3"
+                                            Cursor="Hand"
+                                            Visibility="{Binding CanReview, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                    <Button Content="Отклонить"
+                                            Command="{Binding DataContext.RejectCommand, RelativeSource={RelativeSource AncestorType=Page}}"
+                                            CommandParameter="{Binding}"
+                                            Background="#c62828"
+                                            Foreground="White"
+                                            BorderThickness="0"
+                                            Padding="8,3"
+                                            Cursor="Hand"
+                                            Visibility="{Binding CanReview, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Border>
+    </Grid>
+</Page>
