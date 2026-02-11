@@ -81,7 +81,9 @@ namespace SchoolScheduleApp.Views
         private void BtnLogout_Click(object sender, RoutedEventArgs e)
         {
             UserSession.Clear();
-            new MainWindow().Show();
+            var loginWindow = new MainWindow();
+            Application.Current.MainWindow = loginWindow;
+            loginWindow.Show();
             Close();
         }
     }
