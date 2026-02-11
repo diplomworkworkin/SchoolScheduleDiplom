@@ -2,8 +2,8 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Ручное редактирование расписания"
-        Width="980"
-        Height="650"
+        Width="1120"
+        Height="690"
         WindowStartupLocation="CenterOwner"
         Background="{DynamicResource WindowBackground}">
     <Grid Margin="16">
@@ -13,12 +13,17 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <TextBlock Grid.Row="0"
-                   Text="Ручное редактирование расписания"
-                   FontSize="22"
-                   FontWeight="Bold"
-                   Foreground="{DynamicResource PrimaryText}"
-                   Margin="0,0,0,12"/>
+        <StackPanel Grid.Row="0">
+            <TextBlock Text="Ручное редактирование расписания"
+                       FontSize="22"
+                       FontWeight="Bold"
+                       Foreground="{DynamicResource PrimaryText}"
+                       Margin="0,0,0,8"/>
+            <TextBlock Text="Проверки: учитель может вести только свой предмет; номера уроков должны соответствовать смене класса; проверяются конфликты учителя и кабинета."
+                       Foreground="{DynamicResource SecondaryText}"
+                       FontSize="12"
+                       Margin="0,0,0,8"/>
+        </StackPanel>
 
         <DataGrid x:Name="LessonsGrid"
                   Grid.Row="1"
@@ -38,32 +43,59 @@
                                         Width="*"
                                         SelectedValueBinding="{Binding SubjectId, UpdateSourceTrigger=PropertyChanged}"
                                         SelectedValuePath="Id"
-                                        DisplayMemberPath="Name"
-                                        ItemsSource="{Binding DataContext.Subjects, RelativeSource={RelativeSource AncestorType=Window}}"/>
+                                        DisplayMemberPath="Name"/>
                 <DataGridComboBoxColumn x:Name="TeacherColumn" Header="Учитель"
                                         Width="260"
                                         SelectedValueBinding="{Binding TeacherId, UpdateSourceTrigger=PropertyChanged}"
                                         SelectedValuePath="Id"
-                                        DisplayMemberPath="FullName"
-                                        ItemsSource="{Binding DataContext.Teachers, RelativeSource={RelativeSource AncestorType=Window}}"/>
+                                        DisplayMemberPath="FullName"/>
                 <DataGridComboBoxColumn x:Name="ClassroomColumn" Header="Кабинет"
                                         Width="190"
                                         SelectedValueBinding="{Binding ClassroomId, UpdateSourceTrigger=PropertyChanged}"
                                         SelectedValuePath="Id"
-                                        DisplayMemberPath="Number"
-                                        ItemsSource="{Binding DataContext.Classrooms, RelativeSource={RelativeSource AncestorType=Window}}"/>
+                                        DisplayMemberPath="Number"/>
             </DataGrid.Columns>
         </DataGrid>
 
         <DockPanel Grid.Row="2" Margin="0,12,0,0">
-            <StackPanel Orientation="Horizontal" DockPanel.Dock="Left">
+            <StackPanel Orientation="Horizontal" DockPanel.Dock="Left" VerticalAlignment="Center">
                 <Button Content="+ Урок"
                         Width="100"
                         Margin="0,0,8,0"
                         Click="BtnAddLesson_Click"/>
                 <Button Content="Удалить урок"
                         Width="110"
+                        Margin="0,0,12,0"
                         Click="BtnDeleteLesson_Click"/>
+
+                <TextBox x:Name="TbNewSubject"
+                         Width="140"
+                         Margin="0,0,6,0"
+                         VerticalContentAlignment="Center"
+                         ToolTip="Новый предмет"/>
+                <Button Content="+ Предмет"
+                        Width="90"
+                        Margin="0,0,12,0"
+                        Click="BtnAddSubject_Click"/>
+
+                <TextBox x:Name="TbNewRoomNumber"
+                         Width="90"
+                         Margin="0,0,6,0"
+                         VerticalContentAlignment="Center"
+                         ToolTip="Кабинет"/>
+                <TextBox x:Name="TbNewRoomType"
+                         Width="110"
+                         Margin="0,0,6,0"
+                         VerticalContentAlignment="Center"
+                         ToolTip="Тип"/>
+                <TextBox x:Name="TbNewRoomCapacity"
+                         Width="70"
+                         Margin="0,0,6,0"
+                         VerticalContentAlignment="Center"
+                         ToolTip="Вместимость"/>
+                <Button Content="+ Кабинет"
+                        Width="95"
+                        Click="BtnAddClassroom_Click"/>
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">

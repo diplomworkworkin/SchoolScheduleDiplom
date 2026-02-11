@@ -14,6 +14,7 @@ namespace SchoolScheduleApp.ViewModels
         public string Day { get; set; } = string.Empty;
         public int DayOfWeek { get; set; }
         public int LessonIndex { get; set; }
+        public string TimeRange { get; set; } = string.Empty;
         public string Subject { get; set; } = string.Empty;
         public string Teacher { get; set; } = string.Empty;
         public string Classroom { get; set; } = string.Empty;
@@ -198,6 +199,7 @@ namespace SchoolScheduleApp.ViewModels
                     Day = DayToText(lesson.DayOfWeek),
                     DayOfWeek = lesson.DayOfWeek,
                     LessonIndex = lesson.LessonIndex,
+                    TimeRange = SchedulePresentationHelper.LessonIndexToTimeRange(lesson.LessonIndex),
                     Subject = lesson.Subject?.Name ?? string.Empty,
                     Teacher = lesson.Teacher?.FullName ?? string.Empty,
                     Classroom = lesson.Classroom?.Number ?? "-"
