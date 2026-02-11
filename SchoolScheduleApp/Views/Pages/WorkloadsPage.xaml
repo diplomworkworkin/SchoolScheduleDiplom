@@ -1,27 +1,13 @@
 <Page x:Class="SchoolScheduleApp.Views.Pages.WorkloadsPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-	      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-	      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       mc:Ignorable="d"
       Title="WorkloadsPage">
 
     <Page.Resources>
-        <!-- Таблица в стиле интерфейса (под обе темы) -->
-        <Style x:Key="NiceGrid" TargetType="DataGrid">
-            <Setter Property="Background" Value="{DynamicResource InputBackground}"/>
-            <Setter Property="Foreground" Value="{DynamicResource PrimaryText}"/>
-            <Setter Property="RowBackground" Value="{DynamicResource InputBackground}"/>
-            <Setter Property="AlternatingRowBackground" Value="{DynamicResource CardBackground}"/>
-            <Setter Property="GridLinesVisibility" Value="Horizontal"/>
-            <Setter Property="HeadersVisibility" Value="Column"/>
-            <Setter Property="BorderBrush" Value="{DynamicResource CardBorder}"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="CanUserAddRows" Value="False"/>
-            <Setter Property="IsReadOnly" Value="True"/>
-            <Setter Property="SelectionUnit" Value="FullRow"/>
-        </Style>
 
         <Style TargetType="DataGridColumnHeader">
             <Setter Property="Foreground" Value="{DynamicResource PrimaryText}"/>
@@ -47,9 +33,16 @@
         </Style>
 
         <Style TargetType="DataGridCell">
-            <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=Foreground}"/>
+            <Setter Property="Foreground" Value="{DynamicResource PrimaryText}"/>
             <Setter Property="Padding" Value="10,6"/>
             <Setter Property="BorderThickness" Value="0"/>
+        </Style>
+
+        <Style x:Key="WorkloadFormComboBoxStyle" TargetType="ComboBox" BasedOn="{StaticResource {x:Type ComboBox}}">
+            <Setter Property="Height" Value="34"/>
+            <Setter Property="Background" Value="#F3F5F7"/>
+            <Setter Property="BorderBrush" Value="#CCD3D9"/>
+            <Setter Property="Foreground" Value="#1F1F1F"/>
         </Style>
     </Page.Resources>
 
@@ -145,30 +138,21 @@
                           DisplayMemberPath="Name"
                           SelectedValuePath="Id"
                           SelectedValue="{Binding FormClassId}"
-                          Height="34"
-                          Background="{DynamicResource InputBackground}"
-                          BorderBrush="{DynamicResource CardBorder}"
-                          Foreground="{DynamicResource PrimaryText}"/>
+                          Style="{StaticResource WorkloadFormComboBoxStyle}"/>
 
                 <TextBlock Text="Учитель:" Foreground="{DynamicResource SecondaryText}" Margin="0,12,0,6"/>
                 <ComboBox ItemsSource="{Binding Teachers}"
                           DisplayMemberPath="FullName"
                           SelectedValuePath="Id"
                           SelectedValue="{Binding FormTeacherId}"
-                          Height="34"
-                          Background="{DynamicResource InputBackground}"
-                          BorderBrush="{DynamicResource CardBorder}"
-                          Foreground="{DynamicResource PrimaryText}"/>
+                          Style="{StaticResource WorkloadFormComboBoxStyle}"/>
 
                 <TextBlock Text="Предмет:" Foreground="{DynamicResource SecondaryText}" Margin="0,12,0,6"/>
                 <ComboBox ItemsSource="{Binding Subjects}"
                           DisplayMemberPath="Name"
                           SelectedValuePath="Id"
                           SelectedValue="{Binding FormSubjectId}"
-                          Height="34"
-                          Background="{DynamicResource InputBackground}"
-                          BorderBrush="{DynamicResource CardBorder}"
-                          Foreground="{DynamicResource PrimaryText}"/>
+                          Style="{StaticResource WorkloadFormComboBoxStyle}"/>
 
                 <TextBlock Text="Часов в неделю (1..10):" Foreground="{DynamicResource SecondaryText}" Margin="0,12,0,6"/>
                 <TextBox Text="{Binding FormHoursPerWeek}"
