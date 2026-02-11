@@ -1,11 +1,11 @@
 using SchoolSchedule.Context;
 using SchoolSchedule.Entites;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace SchoolScheduleApp.Views.Windows
 {
@@ -18,6 +18,9 @@ namespace SchoolScheduleApp.Views.Windows
             public int SubjectId { get; set; }
             public int TeacherId { get; set; }
             public int? ClassroomId { get; set; }
+
+            public ObservableCollection<Teacher> AvailableTeachers { get; set; } = new();
+            public string TeacherName => AvailableTeachers.FirstOrDefault(t => t.Id == TeacherId)?.FullName ?? "—";
         }
 
         private readonly int _classId;
@@ -38,12 +41,12 @@ namespace SchoolScheduleApp.Views.Windows
             LoadDictionaries();
             BindComboColumns();
             LoadLessons();
+            RefreshTeacherOptionsForAllRows();
         }
 
         private void BindComboColumns()
         {
             SubjectColumn.ItemsSource = Subjects;
-            TeacherColumn.ItemsSource = Teachers;
             ClassroomColumn.ItemsSource = Classrooms;
         }
 
@@ -92,17 +95,53 @@ namespace SchoolScheduleApp.Views.Windows
             }
         }
 
+        private void RefreshTeacherOptionsForAllRows()
+        {
+            foreach (var row in Lessons)
+            {
+                var filteredTeachers = Teachers
+                    .Where(t => !t.SubjectId.HasValue || t.SubjectId.Value == row.SubjectId)
+                    .ToList();
+
+                row.AvailableTeachers = new ObservableCollection<Teacher>(filteredTeachers);
+
+                if (filteredTeachers.All(t => t.Id != row.TeacherId))
+                {
+                    row.TeacherId = filteredTeachers.FirstOrDefault()?.Id ?? 0;
+                }
+            }
+
+            LessonsGrid.Items.Refresh();
+        }
+
+        private void LessonsGrid_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
+        {
+            if (e.EditAction != DataGridEditAction.Commit)
+            {
+                return;
+            }
+
+            Dispatcher.BeginInvoke(new Action(RefreshTeacherOptionsForAllRows));
+        }
+
         private void BtnAddLesson_Click(object sender, RoutedEventArgs e)
         {
             var nextIndex = Lessons.Count == 0 ? 1 : Lessons.Max(x => x.LessonIndex) + 1;
+            var defaultSubjectId = Subjects.FirstOrDefault()?.Id ?? 0;
+            var defaultTeachers = Teachers
+                .Where(t => !t.SubjectId.HasValue || t.SubjectId.Value == defaultSubjectId)
+                .ToList();
 
             Lessons.Add(new EditableLessonRow
             {
                 LessonIndex = nextIndex,
-                SubjectId = Subjects.FirstOrDefault()?.Id ?? 0,
-                TeacherId = Teachers.FirstOrDefault()?.Id ?? 0,
-                ClassroomId = Classrooms.FirstOrDefault()?.Id
+                SubjectId = defaultSubjectId,
+                TeacherId = defaultTeachers.FirstOrDefault()?.Id ?? 0,
+                ClassroomId = Classrooms.FirstOrDefault()?.Id,
+                AvailableTeachers = new ObservableCollection<Teacher>(defaultTeachers)
             });
+
+            LessonsGrid.Items.Refresh();
         }
 
         private void BtnDeleteLesson_Click(object sender, RoutedEventArgs e)
@@ -158,11 +197,6 @@ namespace SchoolScheduleApp.Views.Windows
                 return;
             }
 
-            if (string.IsNullOrWhiteSpace(roomType))
-            {
-                roomType = "Обычный";
-            }
-
             using var db = new SchoolDbContext();
             if (db.Classrooms.Any(c => c.Number.ToLower() == roomNumber.ToLower()))
             {
@@ -173,7 +207,7 @@ namespace SchoolScheduleApp.Views.Windows
             var classroom = new Classroom
             {
                 Number = roomNumber,
-                Type = roomType,
+                Type = string.IsNullOrWhiteSpace(roomType) ? null : roomType,
                 Capacity = capacity
             };
 

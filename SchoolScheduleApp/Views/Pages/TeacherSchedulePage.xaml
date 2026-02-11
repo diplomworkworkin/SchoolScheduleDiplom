@@ -112,7 +112,7 @@
                     <DataGridTextColumn Header="Класс" Binding="{Binding AcademicClass}" Width="120"/>
                     <DataGridTextColumn Header="Предмет" Binding="{Binding Subject}" Width="*"/>
                     <DataGridTextColumn Header="Кабинет" Binding="{Binding Classroom}" Width="110"/>
-                    <DataGridTextColumn Header="Комментарий" Binding="{Binding Comment}" Width="160"/>
+                    <DataGridTextColumn Header="Тип" Binding="{Binding Type}" Width="160"/>
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>

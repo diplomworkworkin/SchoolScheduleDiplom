@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SchoolSchedule.Entites
 {
@@ -16,14 +11,14 @@ namespace SchoolSchedule.Entites
 
         [Required]
         [MaxLength(10)]
-        public string Number { get; set; } // "101", "205А"
+        public string Number { get; set; } = string.Empty; // "101", "205А"
 
         public int Capacity { get; set; } // Вместимость (человек)
 
         [MaxLength(50)]
-        public string Type { get; set; } // "Обычный", "Компьютерный", "Спортзал"
+        public string? Type { get; set; } // "Обычный", "Компьютерный", "Спортзал"
 
-        // Переопределение метода ToString удобно для WPF ComboBox (будет показывать номер)
-        public override string ToString() => $"{Number} ({Type})";
+        public override string ToString()
+            => string.IsNullOrWhiteSpace(Type) ? Number : $"{Number} ({Type})";
     }
 }

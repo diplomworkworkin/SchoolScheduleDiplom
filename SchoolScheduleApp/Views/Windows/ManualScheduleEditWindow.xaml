@@ -36,7 +36,8 @@
                   SelectionUnit="FullRow"
                   RowHeaderWidth="0"
                   Background="{DynamicResource CardBackground}"
-                  Foreground="{DynamicResource PrimaryText}">
+                  Foreground="{DynamicResource PrimaryText}"
+                  CellEditEnding="LessonsGrid_CellEditEnding">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Урок" Binding="{Binding LessonIndex}" Width="80"/>
                 <DataGridComboBoxColumn x:Name="SubjectColumn" Header="Предмет"
@@ -44,11 +45,21 @@
                                         SelectedValueBinding="{Binding SubjectId, UpdateSourceTrigger=PropertyChanged}"
                                         SelectedValuePath="Id"
                                         DisplayMemberPath="Name"/>
-                <DataGridComboBoxColumn x:Name="TeacherColumn" Header="Учитель"
-                                        Width="260"
-                                        SelectedValueBinding="{Binding TeacherId, UpdateSourceTrigger=PropertyChanged}"
-                                        SelectedValuePath="Id"
-                                        DisplayMemberPath="FullName"/>
+                <DataGridTemplateColumn Header="Учитель" Width="260">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding TeacherName}" VerticalAlignment="Center"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellEditingTemplate>
+                        <DataTemplate>
+                            <ComboBox ItemsSource="{Binding AvailableTeachers}"
+                                      SelectedValuePath="Id"
+                                      DisplayMemberPath="FullName"
+                                      SelectedValue="{Binding TeacherId, UpdateSourceTrigger=PropertyChanged}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellEditingTemplate>
+                </DataGridTemplateColumn>
                 <DataGridComboBoxColumn x:Name="ClassroomColumn" Header="Кабинет"
                                         Width="190"
                                         SelectedValueBinding="{Binding ClassroomId, UpdateSourceTrigger=PropertyChanged}"

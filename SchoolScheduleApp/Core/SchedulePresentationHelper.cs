@@ -1,24 +1,10 @@
-using System.Collections.Generic;
+using System;
 
 namespace SchoolScheduleApp.Core
 {
     public static class SchedulePresentationHelper
     {
-        private static readonly Dictionary<int, string> LessonTimes = new()
-        {
-            { 1, "08:00–08:40" },
-            { 2, "08:50–09:30" },
-            { 3, "09:40–10:20" },
-            { 4, "10:30–11:10" },
-            { 5, "11:20–12:00" },
-            { 6, "12:10–12:50" },
-            { 7, "13:00–13:40" },
-            { 8, "13:50–14:30" },
-            { 9, "14:40–15:20" },
-            { 10, "15:30–16:10" },
-            { 11, "16:20–17:00" },
-            { 12, "17:10–17:50" }
-        };
+        private const int BreakBetweenLessonsMinutes = 10;
 
         public static string DayToText(int day)
         {
@@ -35,7 +21,22 @@ namespace SchoolScheduleApp.Core
 
         public static string LessonIndexToTimeRange(int lessonIndex)
         {
-            return LessonTimes.TryGetValue(lessonIndex, out var time) ? time : "—";
+            if (lessonIndex <= 0)
+            {
+                return "—";
+            }
+
+            var settings = AppSettingsService.Load();
+            var lessonDuration = settings.LessonDuration > 0 ? settings.LessonDuration : 45;
+            var startOfDay = TimeSpan.TryParse(settings.StartTime, out var parsedStart)
+                ? parsedStart
+                : new TimeSpan(8, 0, 0);
+
+            var offsetMinutes = (lessonIndex - 1) * (lessonDuration + BreakBetweenLessonsMinutes);
+            var lessonStart = startOfDay.Add(TimeSpan.FromMinutes(offsetMinutes));
+            var lessonEnd = lessonStart.Add(TimeSpan.FromMinutes(lessonDuration));
+
+            return $"{lessonStart:hh\\:mm}–{lessonEnd:hh\\:mm}";
         }
     }
 }

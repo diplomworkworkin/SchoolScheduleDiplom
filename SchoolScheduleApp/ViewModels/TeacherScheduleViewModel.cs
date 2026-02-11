@@ -21,7 +21,7 @@ namespace SchoolScheduleApp.ViewModels
         public string AcademicClass { get; set; } = "";
         public string Subject { get; set; } = "";
         public string Classroom { get; set; } = "";
-        public string Comment { get; set; } = "—";
+        public string Type { get; set; } = "—";
     }
 
     public class TeacherScheduleViewModel : ViewModelBase
@@ -174,7 +174,7 @@ namespace SchoolScheduleApp.ViewModels
                     AcademicClass = l.AcademicClass?.Name ?? "",
                     Subject = l.Subject?.Name ?? "",
                     Classroom = l.Classroom?.Number ?? "—",
-                    Comment = "—"
+                    Type = string.IsNullOrWhiteSpace(l.Classroom?.Type) ? "—" : l.Classroom!.Type!
                 });
             }
         }
