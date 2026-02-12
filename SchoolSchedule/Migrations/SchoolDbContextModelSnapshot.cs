@@ -215,10 +215,15 @@ namespace SchoolSchedule.Migrations
                         .HasMaxLength(150)
                         .HasColumnType("nvarchar(150)");
 
+                    b.Property<int?>("ClassroomId")
+                        .HasColumnType("int");
+
                     b.Property<int?>("SubjectId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ClassroomId");
 
                     b.HasIndex("SubjectId");
 
@@ -228,12 +233,14 @@ namespace SchoolSchedule.Migrations
                         new
                         {
                             Id = 1,
+                            ClassroomId = 1,
                             FullName = "Петров Петр Петрович",
                             SubjectId = 1
                         },
                         new
                         {
                             Id = 2,
+                            ClassroomId = 2,
                             FullName = "Сидорова Анна Ивановна",
                             SubjectId = 2
                         });
@@ -418,10 +425,17 @@ namespace SchoolSchedule.Migrations
 
             modelBuilder.Entity("SchoolSchedule.Entites.Teacher", b =>
                 {
+                    b.HasOne("SchoolSchedule.Entites.Classroom", "Classroom")
+                        .WithMany()
+                        .HasForeignKey("ClassroomId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
                     b.HasOne("SchoolSchedule.Entites.Subject", "Subject")
                         .WithMany()
                         .HasForeignKey("SubjectId")
                         .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("Classroom");
 
                     b.Navigation("Subject");
                 });

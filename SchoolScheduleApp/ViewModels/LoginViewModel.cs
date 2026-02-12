@@ -12,7 +12,10 @@ namespace SchoolScheduleApp.ViewModels
 {
     public class LoginViewModel : ViewModelBase
     {
+        private readonly AppSettings _settings;
         private string _username;
+        private bool _rememberMe;
+        private string _initialPassword = string.Empty;
         private string _errorMessage;
 
         public string Username
@@ -27,11 +30,32 @@ namespace SchoolScheduleApp.ViewModels
             set { _errorMessage = value; OnPropertyChanged(); } // Сообщение об ошибке (красным)
         }
 
+        public bool RememberMe
+        {
+            get => _rememberMe;
+            set { _rememberMe = value; OnPropertyChanged(); }
+        }
+
+        public string InitialPassword
+        {
+            get => _initialPassword;
+            set { _initialPassword = value; OnPropertyChanged(); }
+        }
+
         // Команда для кнопки
         public RelayCommand LoginCommand { get; }
 
         public LoginViewModel()
         {
+            _settings = AppSettingsService.Load();
+
+            if (_settings.RememberMe)
+            {
+                Username = _settings.SavedUsername;
+                InitialPassword = _settings.SavedPassword;
+                RememberMe = true;
+            }
+
             LoginCommand = new RelayCommand(ExecuteLogin);
         }
 
@@ -62,6 +86,12 @@ namespace SchoolScheduleApp.ViewModels
                 }
 
                 ErrorMessage = "";
+
+                _settings.RememberMe = RememberMe;
+                _settings.SavedUsername = RememberMe ? Username : string.Empty;
+                _settings.SavedPassword = RememberMe ? password : string.Empty;
+                AppSettingsService.Save(_settings);
+
                 UserSession.SetUser(user);
                 AppLogger.LogInfo($"Вход в систему: {user.Username} ({user.Role})");
 

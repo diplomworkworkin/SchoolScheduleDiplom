@@ -13,12 +13,17 @@ namespace SchoolSchedule.Entites
     {
         [Key]
         public int Id { get; set; }
+
         public int? SubjectId { get; set; }
         public virtual Subject? Subject { get; set; }
 
+        public int? ClassroomId { get; set; }
+        public virtual Classroom? Classroom { get; set; }
+
         [Required]
         [MaxLength(150)]
-        public string FullName { get; set; } 
+        public string FullName { get; set; } = string.Empty;
+
         public virtual ICollection<Workload> Workloads { get; set; } = new List<Workload>();
     }
 }

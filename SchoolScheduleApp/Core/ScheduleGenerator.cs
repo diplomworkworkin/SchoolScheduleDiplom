@@ -33,6 +33,7 @@ namespace SchoolScheduleApp.Core
             var workloads = db.Workloads
                 .Include(w => w.Subject)
                 .Include(w => w.Teacher)
+                    .ThenInclude(t => t.Classroom)
                 .Include(w => w.AcademicClass)
                 .ToList();
 
@@ -209,6 +210,20 @@ namespace SchoolScheduleApp.Core
         private static int? PickRoom(Workload w, List<Classroom> rooms, HashSet<string> busyRoom, int day, int idx)
         {
             int students = w.AcademicClass?.StudentCount ?? 0;
+
+            if (w.Teacher?.ClassroomId != null)
+            {
+                var ownRoom = rooms.FirstOrDefault(r => r.Id == w.Teacher.ClassroomId.Value);
+                if (ownRoom != null)
+                {
+                    var ownRoomKey = $"{ownRoom.Id}-{day}-{idx}";
+                    var roomFits = ownRoom.Capacity <= 0 || students <= 0 || ownRoom.Capacity >= students;
+                    if (roomFits && !busyRoom.Contains(ownRoomKey))
+                    {
+                        return ownRoom.Id;
+                    }
+                }
+            }
 
             foreach (var r in rooms)
             {

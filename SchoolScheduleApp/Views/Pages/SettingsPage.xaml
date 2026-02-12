@@ -13,6 +13,8 @@
     </Page.DataContext>
 
     <Page.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVisibility"/>
+
         <!-- Стиль для Toggle Switch (Переключатель) -->
         <Style x:Key="ToggleSwitchStyle" TargetType="CheckBox">
             <Setter Property="Cursor" Value="Hand"/>
@@ -95,7 +97,8 @@
                 </Border>
 
                 <!-- БЛОК 2: ПАРАМЕТРЫ РАСПИСАНИЯ -->
-                <Border Style="{StaticResource GlassCard}" Padding="20" Margin="0,0,0,20">
+                <Border Style="{StaticResource GlassCard}" Padding="20" Margin="0,0,0,20"
+                        Visibility="{Binding CanManageAcademicSettings, Converter={StaticResource BoolToVisibility}}">
                     <StackPanel>
                         <TextBlock Text="Параметры учебного процесса" Foreground="{DynamicResource AccentColor}" FontWeight="Bold" FontSize="16" Margin="0,0,0,15"/>
 
@@ -129,7 +132,8 @@
                 </Border>
 
                 <!-- БЛОК 3: БЕЗОПАСНОСТЬ И ДАННЫЕ -->
-                <Border Style="{StaticResource GlassCard}" Padding="20" Margin="0,0,0,20">
+                <Border Style="{StaticResource GlassCard}" Padding="20" Margin="0,0,0,20"
+                        Visibility="{Binding CanManageAcademicSettings, Converter={StaticResource BoolToVisibility}}">
                     <StackPanel>
                         <TextBlock Text="Обслуживание базы данных" Foreground="{DynamicResource AccentColor}" FontWeight="Bold" FontSize="16" Margin="0,0,0,15"/>
 
@@ -143,6 +147,44 @@
                                     Background="Transparent" Foreground="{DynamicResource AccentColor}" 
                                     BorderBrush="{DynamicResource AccentColor}" BorderThickness="1"
                                     Padding="15,8" Cursor="Hand">
+                                <Button.Resources>
+                                    <Style TargetType="Border">
+                                        <Setter Property="CornerRadius" Value="5"/>
+                                    </Style>
+                                </Button.Resources>
+                            </Button>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <Border Style="{StaticResource GlassCard}" Padding="20" Margin="0,0,0,20"
+                        Visibility="{Binding CanExportSchedule, Converter={StaticResource BoolToVisibility}}">
+                    <StackPanel>
+                        <TextBlock Text="Экспорт расписания" Foreground="{DynamicResource AccentColor}" FontWeight="Bold" FontSize="16" Margin="0,0,0,15"/>
+
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="240"/>
+                                <ColumnDefinition Width="220"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Text="Формат экспорта:" Foreground="{DynamicResource PrimaryText}" VerticalAlignment="Center"/>
+                            <ComboBox Grid.Column="1"
+                                      ItemsSource="{Binding ExportFormats}"
+                                      SelectedItem="{Binding SelectedExportFormat}"
+                                      Height="35"/>
+
+                            <Button Grid.Column="2"
+                                    Content="📤 Экспорт"
+                                    Command="{Binding ExportCommand}"
+                                    HorizontalAlignment="Right"
+                                    Background="Transparent"
+                                    Foreground="{DynamicResource AccentColor}"
+                                    BorderBrush="{DynamicResource AccentColor}"
+                                    BorderThickness="1"
+                                    Padding="15,8"
+                                    Cursor="Hand">
                                 <Button.Resources>
                                     <Style TargetType="Border">
                                         <Setter Property="CornerRadius" Value="5"/>

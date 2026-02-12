@@ -54,6 +54,12 @@ namespace SchoolSchedule.Context
                 .HasForeignKey(t => t.SubjectId)
                 .OnDelete(DeleteBehavior.SetNull);
 
+            modelBuilder.Entity<Teacher>()
+                .HasOne(t => t.Classroom)
+                .WithMany()
+                .HasForeignKey(t => t.ClassroomId)
+                .OnDelete(DeleteBehavior.SetNull);
+
             modelBuilder.Entity<Lesson>()
                 .HasIndex(x => new { x.AcademicClassId, x.DayOfWeek, x.LessonIndex })
                 .IsUnique();
@@ -101,8 +107,8 @@ namespace SchoolSchedule.Context
             );
 
             modelBuilder.Entity<Teacher>().HasData(
-                new Teacher { Id = 1, FullName = "Петров Петр Петрович", SubjectId = 1 },
-                new Teacher { Id = 2, FullName = "Сидорова Анна Ивановна", SubjectId = 2 }
+                new Teacher { Id = 1, FullName = "Петров Петр Петрович", SubjectId = 1, ClassroomId = 1 },
+                new Teacher { Id = 2, FullName = "Сидорова Анна Ивановна", SubjectId = 2, ClassroomId = 2 }
             );
             modelBuilder.Entity<AcademicClass>().HasData(
                 new AcademicClass { Id = 1, Name = "11-А", StudentCount = 25, Shift = 1, CuratorTeacherId = 1 },

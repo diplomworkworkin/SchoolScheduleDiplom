@@ -103,7 +103,8 @@ namespace SchoolScheduleApp.ViewModels
             {
                 Id = fromDb.Id,
                 FullName = fromDb.FullName,
-                SubjectId = fromDb.SubjectId
+                SubjectId = fromDb.SubjectId,
+                ClassroomId = fromDb.ClassroomId
             };
 
             var wnd = new TeacherEditWindow(editable)
@@ -116,6 +117,7 @@ namespace SchoolScheduleApp.ViewModels
 
             fromDb.FullName = editable.FullName;
             fromDb.SubjectId = editable.SubjectId;
+            fromDb.ClassroomId = editable.ClassroomId;
             db.SaveChanges();
 
             LoadData();

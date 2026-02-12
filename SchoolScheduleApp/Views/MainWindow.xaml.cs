@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using SchoolScheduleApp.ViewModels;
+using System.Windows;
 using System.Windows.Input;
 
 namespace SchoolScheduleApp
@@ -28,6 +29,17 @@ namespace SchoolScheduleApp
             PasswordPlaceholder.Visibility = UserPasswordBox.Password.Length > 0
                 ? Visibility.Collapsed
                 : Visibility.Visible;
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is not LoginViewModel vm || string.IsNullOrEmpty(vm.InitialPassword))
+            {
+                return;
+            }
+
+            UserPasswordBox.Password = vm.InitialPassword;
+            PasswordPlaceholder.Visibility = Visibility.Collapsed;
         }
     }
 }

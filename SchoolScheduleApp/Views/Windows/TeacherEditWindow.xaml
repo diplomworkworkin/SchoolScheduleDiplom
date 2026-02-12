@@ -62,6 +62,20 @@
                                 Click="BtnAddSubject_Click"/>
                     </DockPanel>
 
+                    <TextBlock Text="Закрепленный кабинет:"
+                               Foreground="{DynamicResource SecondaryText}"
+                               Margin="0,15,0,5"/>
+                    <ComboBox ItemsSource="{Binding Classrooms}"
+                              SelectedValuePath="Id"
+                              SelectedValue="{Binding Teacher.ClassroomId}"
+                              Height="35">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding DisplayName}"/>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+
                     <Separator Margin="0,18,0,12" Opacity="0.4"/>
 
                     <TextBlock Text="Добавить кабинет (быстро):"

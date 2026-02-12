@@ -10,7 +10,8 @@
         WindowStyle="None" 
         ResizeMode="NoResize"
         AllowsTransparency="True"
-        Background="Transparent">
+        Background="Transparent"
+        Loaded="Window_Loaded">
 
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
@@ -232,7 +233,8 @@
                         <Grid Margin="0,0,0,30">
                             <CheckBox Content="Запомнить меня" Foreground="White" FontSize="12"
                                       HorizontalAlignment="Left" VerticalContentAlignment="Center"
-                                      Cursor="Hand">
+                                      Cursor="Hand"
+                                      IsChecked="{Binding RememberMe}">
                                 <CheckBox.Template>
                                     <ControlTemplate TargetType="CheckBox">
                                         <StackPanel Orientation="Horizontal">
