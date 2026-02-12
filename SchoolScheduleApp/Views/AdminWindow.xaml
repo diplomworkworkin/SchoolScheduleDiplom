@@ -8,7 +8,7 @@
         Title="Панель Администратора" Height="720" Width="1200"
         WindowStartupLocation="CenterScreen"
         WindowStyle="None"
-        ResizeMode="CanResize"
+        ResizeMode="NoResize"
         AllowsTransparency="True"
         Background="Transparent">
 
@@ -30,8 +30,6 @@
                     <!-- Логотип -->
                     <StackPanel Orientation="Horizontal" Margin="30,40,0,50">
                         <Border Width="40" Height="40" CornerRadius="20" BorderBrush="{DynamicResource AccentColor}" BorderThickness="2">
-                            <!-- БЫЛО: TextBlock без цвета (по умолчанию черный) -->
-                            <!-- СТАЛО: Foreground="{DynamicResource PrimaryText}" -->
                             <TextBlock Text="🎓" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20"
                Foreground="{DynamicResource PrimaryText}"/>
 
