@@ -1,4 +1,4 @@
-using SchoolSchedule.Context;
+﻿using SchoolSchedule.Context;
 using SchoolSchedule.Entites;
 using SchoolScheduleApp.Core;
 using System;
@@ -144,6 +144,7 @@ namespace SchoolScheduleApp.ViewModels
 
         private void LoadSchedule()
         {
+            WeekRangeText = GetCurrentWeekRange();
             ScheduleRows.Clear();
 
             var user = UserSession.CurrentUser;
@@ -193,7 +194,7 @@ namespace SchoolScheduleApp.ViewModels
             var diff = (7 + (today.DayOfWeek - DayOfWeek.Monday)) % 7;
             var monday = today.AddDays(-diff);
             var friday = monday.AddDays(4);
-            return $"{monday:dd.MM} – {friday:dd.MM}";
+            return $"{monday:dd.MM.yyyy} – {friday:dd.MM.yyyy}";
         }
     }
 }

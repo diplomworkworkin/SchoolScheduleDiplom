@@ -2,9 +2,9 @@ using System.Windows.Controls;
 
 namespace SchoolScheduleApp.Views.Pages
 {
-    public partial class DashboardPage : Page
+    public partial class MessagesPage : Page
     {
-        public DashboardPage()
+        public MessagesPage()
         {
             InitializeComponent();
         }

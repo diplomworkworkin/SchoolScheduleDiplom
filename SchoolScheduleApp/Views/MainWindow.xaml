@@ -232,6 +232,7 @@
                         <Grid Margin="0,0,0,30">
                             <CheckBox Content="Запомнить меня" Foreground="White" FontSize="12"
                                       HorizontalAlignment="Left" VerticalContentAlignment="Center"
+                                      IsChecked="{Binding RememberMe}"
                                       Cursor="Hand">
                                 <CheckBox.Template>
                                     <ControlTemplate TargetType="CheckBox">

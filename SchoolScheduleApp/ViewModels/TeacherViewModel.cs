@@ -1,4 +1,4 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using SchoolSchedule.Context;
 using SchoolSchedule.Entites;
 using SchoolScheduleApp.Core;
@@ -59,7 +59,7 @@ namespace SchoolScheduleApp.ViewModels
 
             var teacherRows = db.Teachers
                 .Include(t => t.Subject)
-                .OrderBy(t => t.FullName)
+                .OrderBy(t => t.Id)
                 .ToList()
                 .Select(t => new TeacherRow
                 {
@@ -75,13 +75,20 @@ namespace SchoolScheduleApp.ViewModels
 
         private void ExecuteAdd()
         {
-            var wnd = new TeacherEditWindow(new Teacher());
+            var wnd = new TeacherEditWindow(new Teacher())
+            {
+                Owner = Application.Current?.Windows.OfType<Window>()
+                    .FirstOrDefault(w => w.IsActive && w is not TeacherEditWindow)
+                    ?? Application.Current?.MainWindow
+            };
 
             if (wnd.ShowDialog() == true)
             {
                 using var db = new SchoolDbContext();
                 db.Teachers.Add(wnd.Teacher);
                 db.SaveChanges();
+
+                TeacherClassroomBindingService.SetClassroom(wnd.Teacher.Id, wnd.SelectedClassroomId);
                 LoadData();
             }
         }
@@ -101,13 +108,21 @@ namespace SchoolScheduleApp.ViewModels
                 SubjectId = fromDb.SubjectId
             };
 
-            var wnd = new TeacherEditWindow(editable);
+            var mappedClassroomId = TeacherClassroomBindingService.GetClassroomId(editable.Id);
+
+            var wnd = new TeacherEditWindow(editable, mappedClassroomId)
+            {
+                Owner = Application.Current?.Windows.OfType<Window>()
+                    .FirstOrDefault(w => w.IsActive && w is not TeacherEditWindow)
+                    ?? Application.Current?.MainWindow
+            };
             if (wnd.ShowDialog() != true) return;
 
             fromDb.FullName = editable.FullName;
             fromDb.SubjectId = editable.SubjectId;
             db.SaveChanges();
 
+            TeacherClassroomBindingService.SetClassroom(editable.Id, wnd.SelectedClassroomId);
             LoadData();
         }
 
@@ -130,6 +145,7 @@ namespace SchoolScheduleApp.ViewModels
             db.Teachers.Remove(fromDb);
             db.SaveChanges();
 
+            TeacherClassroomBindingService.SetClassroom(teacher.Id, null);
             LoadData();
         }
     }

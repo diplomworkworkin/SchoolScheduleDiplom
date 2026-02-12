@@ -8,7 +8,7 @@
         Title="Панель Учителя" Height="720" Width="1200"
         WindowStartupLocation="CenterScreen"
         WindowStyle="None"
-        ResizeMode="CanResize"
+        ResizeMode="NoResize"
         AllowsTransparency="True"
         Background="Transparent">
 
@@ -42,6 +42,7 @@
 
                     <TextBlock Text="МОЁ РАСПИСАНИЕ" Foreground="{DynamicResource SecondaryText}" FontSize="10" Margin="30,0,0,10" FontWeight="Bold"/>
                     <Button Content="📅   Моё расписание" Style="{StaticResource MenuButton}" Click="BtnSchedule_Click"/>
+                    <Button x:Name="BtnMessages" Content="✉️   Сообщения" Style="{StaticResource MenuButton}" Click="BtnMessages_Click"/>
 
                     <TextBlock Text="СИСТЕМА" Foreground="{DynamicResource SecondaryText}" FontSize="10" Margin="30,30,0,10" FontWeight="Bold"/>
                     <Button Content="⚙️   Настройки" Style="{StaticResource MenuButton}" Click="BtnSettings_Click"/>

@@ -22,19 +22,10 @@
             <TextBlock Text="Учебные классы" Foreground="{DynamicResource PrimaryText}" FontSize="24" FontWeight="Bold" VerticalAlignment="Center"/>
 
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                <Button Content="📂 Список классов" Background="Transparent" Foreground="{DynamicResource AccentColor}" 
-                        BorderBrush="{DynamicResource AccentColor}" BorderThickness="1"
-                        Padding="15,8" Margin="0,0,10,0" Cursor="Hand">
-                    <Button.Resources>
-                        <Style TargetType="Border">
-                            <Setter Property="CornerRadius" Value="10"/>
-                        </Style>
-                    </Button.Resources>
-                </Button>
                 <Button Content="+ Добавить класс"
                 Command="{Binding AddClassCommand}"
                 Background="{DynamicResource AccentColor}" Foreground="White" FontWeight="Bold"
-                Padding="15,8" BorderThickness="0" Cursor="Hand" Height="35">   
+                Padding="12,6" BorderThickness="0" Cursor="Hand" Height="34">   
                     <Button.Resources>
                         <Style TargetType="Border">
                             <Setter Property="CornerRadius" Value="10"/>
@@ -58,6 +49,8 @@
                       Foreground="{DynamicResource PrimaryText}"
                       AutoGenerateColumns="False" CanUserAddRows="False"
                       RowHeight="45" ColumnHeaderHeight="45"
+                      HorizontalAlignment="Stretch"
+                      ColumnWidth="*"
                       PreviewMouseDown="NonInteractiveGrid_PreviewMouseDown"
                       PreviewKeyDown="NonInteractiveGrid_PreviewKeyDown">
 
@@ -94,9 +87,9 @@
                 </DataGrid.Resources>
 
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="60"/>
+                    <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="80"/>
 
-                    <DataGridTemplateColumn Header="Класс" Width="150">
+                    <DataGridTemplateColumn Header="Класс" Width="1.1*">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Border Background="{DynamicResource AccentColor}" CornerRadius="5" Padding="8,2" HorizontalAlignment="Left">
@@ -106,11 +99,11 @@
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
 
-                    <DataGridTextColumn Header="Учеников" Binding="{Binding StudentCount}" Width="150"/>
-                    <DataGridTextColumn Header="Смена" Binding="{Binding Shift}" Width="100"/>
-                    <DataGridTextColumn Header="Куратор" Binding="{Binding CuratorTeacher.FullName}" Width="250"/>
+                    <DataGridTextColumn Header="Учеников" Binding="{Binding StudentCount}" Width="0.9*"/>
+                    <DataGridTextColumn Header="Смена" Binding="{Binding Shift}" Width="0.7*"/>
+                    <DataGridTextColumn Header="Куратор" Binding="{Binding CuratorTeacher.FullName}" Width="2.2*"/>
 
-                    <DataGridTemplateColumn Header="Действия" Width="120">
+                    <DataGridTemplateColumn Header="Действия" Width="140">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">

@@ -80,15 +80,15 @@
                         Content="Сброс"
                         Command="{Binding ResetFiltersCommand}"
                         Margin="0,18,0,0"
-                        Padding="16,8"
-                        Background="{DynamicResource HoverBackground}"
+                        Padding="12,6"
+                        Background="{DynamicResource CardBorder}"
                         Foreground="{DynamicResource PrimaryText}"
                         BorderThickness="0"
                         Cursor="Hand"/>
 
                 <StackPanel Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="1" Orientation="Horizontal" Margin="0,14,0,0">
-                    <TextBlock Text="Текущая неделя:" Foreground="{DynamicResource SecondaryText}" FontSize="11"/>
-                    <TextBlock Text="{Binding WeekRangeText}" Foreground="{DynamicResource PrimaryText}" FontSize="11" Margin="6,0,0,0"/>
+                    <TextBlock Text="Неделя:" Foreground="{DynamicResource SecondaryText}" FontSize="12"/>
+                    <TextBlock Text="{Binding WeekRangeText}" Foreground="{DynamicResource PrimaryText}" FontSize="12" Margin="6,0,0,0"/>
                 </StackPanel>
             </Grid>
         </Border>

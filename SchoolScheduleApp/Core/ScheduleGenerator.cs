@@ -49,6 +49,7 @@ namespace SchoolScheduleApp.Core
             }
 
             var rooms = db.Classrooms.ToList();
+            var teacherRoomMap = TeacherClassroomBindingService.GetAll();
 
             // занятость
             var busyClass = new HashSet<string>();
@@ -98,7 +99,7 @@ namespace SchoolScheduleApp.Core
 
                 for (int i = 0; i < w.HoursPerWeek; i++)
                 {
-                    bool ok = TryPlace(w, startIndex, endIndex, rooms,
+                    bool ok = TryPlace(w, startIndex, endIndex, rooms, teacherRoomMap,
                         busyClass, busyTeacher, busyRoom,
                         classSubjectDayUsed,
                         out Lesson lesson);
@@ -159,6 +160,7 @@ namespace SchoolScheduleApp.Core
             int startIndex,
             int endIndex,
             List<Classroom> rooms,
+            IReadOnlyDictionary<int, int> teacherRoomMap,
             HashSet<string> busyClass,
             HashSet<string> busyTeacher,
             HashSet<string> busyRoom,
@@ -180,7 +182,8 @@ namespace SchoolScheduleApp.Core
                     string subDayKey = $"{w.AcademicClassId}-{w.SubjectId}-{day}";
                     if (classSubjectDayUsed.Contains(subDayKey)) continue;
 
-                    int? roomId = PickRoom(w, rooms, busyRoom, day, idx);
+                    var preferredRoomId = teacherRoomMap.TryGetValue(w.TeacherId, out var room) ? room : (int?)null;
+                    int? roomId = PickRoom(w, rooms, busyRoom, day, idx, preferredRoomId);
 
                     busyClass.Add(classKey);
                     busyTeacher.Add(teacherKey);
@@ -206,13 +209,26 @@ namespace SchoolScheduleApp.Core
             return false;
         }
 
-        private static int? PickRoom(Workload w, List<Classroom> rooms, HashSet<string> busyRoom, int day, int idx)
+        private static int? PickRoom(Workload w, List<Classroom> rooms, HashSet<string> busyRoom, int day, int idx, int? preferredRoomId)
         {
             int students = w.AcademicClass?.StudentCount ?? 0;
 
+            if (preferredRoomId.HasValue)
+            {
+                var preferred = rooms.FirstOrDefault(x => x.Id == preferredRoomId.Value);
+                if (preferred != null)
+                {
+                    var preferredBusy = busyRoom.Contains($"{preferred.Id}-{day}-{idx}");
+                    var preferredTooSmall = preferred.Capacity > 0 && students > 0 && preferred.Capacity < students;
+                    if (!preferredBusy && !preferredTooSmall)
+                    {
+                        return preferred.Id;
+                    }
+                }
+            }
+
             foreach (var r in rooms)
             {
-                // если есть Capacity — проверим
                 if (r.Capacity > 0 && students > 0 && r.Capacity < students)
                     continue;
 

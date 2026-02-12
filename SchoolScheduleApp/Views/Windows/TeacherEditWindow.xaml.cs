@@ -10,14 +10,20 @@ namespace SchoolScheduleApp.Views.Windows
     public partial class TeacherEditWindow : Window
     {
         public ObservableCollection<Subject> Subjects { get; private set; } = new();
-        public Teacher Teacher { get; }
+        public ObservableCollection<Classroom> Classrooms { get; private set; } = new();
 
-        public TeacherEditWindow(Teacher teacher)
+        public Teacher Teacher { get; }
+        public int? SelectedClassroomId { get; set; }
+
+        public TeacherEditWindow(Teacher teacher, int? selectedClassroomId = null)
         {
             InitializeComponent();
 
             Teacher = teacher ?? new Teacher();
+            SelectedClassroomId = selectedClassroomId;
+
             LoadSubjects();
+            LoadClassrooms();
 
             DataContext = this;
         }
@@ -25,9 +31,13 @@ namespace SchoolScheduleApp.Views.Windows
         private void LoadSubjects()
         {
             using var db = new SchoolDbContext();
-            Subjects = new ObservableCollection<Subject>(
-                db.Subjects.OrderBy(s => s.Name).ToList()
-            );
+            Subjects = new ObservableCollection<Subject>(db.Subjects.OrderBy(s => s.Name).ToList());
+        }
+
+        private void LoadClassrooms()
+        {
+            using var db = new SchoolDbContext();
+            Classrooms = new ObservableCollection<Classroom>(db.Classrooms.OrderBy(c => c.Number).ToList());
         }
 
         private void RefreshBinding()
@@ -119,9 +129,13 @@ namespace SchoolScheduleApp.Views.Windows
             db.Classrooms.Add(classroom);
             db.SaveChanges();
 
+            LoadClassrooms();
+            SelectedClassroomId = classroom.Id;
+
             TbNewRoomNumber.Clear();
             TbNewRoomType.Clear();
             TbNewRoomCapacity.Clear();
+            RefreshBinding();
 
             ToastService.Show("Кабинет добавлен.");
         }

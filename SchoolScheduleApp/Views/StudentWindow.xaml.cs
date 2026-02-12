@@ -59,14 +59,15 @@ namespace SchoolScheduleApp.Views
         private void BtnMinimize_Click(object sender, RoutedEventArgs e)
             => WindowState = WindowState.Minimized;
 
-
         private void BtnMaximize_Click(object sender, RoutedEventArgs e)
             => WindowState = WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
 
         private void BtnLogout_Click(object sender, RoutedEventArgs e)
         {
             UserSession.Clear();
-            new MainWindow().Show();
+            var loginWindow = new MainWindow();
+            Application.Current.MainWindow = loginWindow;
+            loginWindow.Show();
             Close();
         }
     }

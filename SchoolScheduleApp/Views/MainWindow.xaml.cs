@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Input;
+using SchoolScheduleApp.ViewModels;
 
 namespace SchoolScheduleApp
 {
@@ -8,6 +9,12 @@ namespace SchoolScheduleApp
         public MainWindow()
         {
             InitializeComponent();
+
+            if (DataContext is LoginViewModel vm && !string.IsNullOrWhiteSpace(vm.RememberedPassword))
+            {
+                UserPasswordBox.Password = vm.RememberedPassword;
+                PasswordPlaceholder.Visibility = Visibility.Collapsed;
+            }
 
             MouseDown += (_, e) =>
             {

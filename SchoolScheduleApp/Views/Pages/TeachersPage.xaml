@@ -22,7 +22,7 @@
             <TextBlock Text="Управление персоналом" Foreground="{DynamicResource PrimaryText}" FontSize="24" FontWeight="Bold" VerticalAlignment="Center"/>
             <Button Content="+ Добавить учителя" Command="{Binding AddCommand}" HorizontalAlignment="Right"
                     Background="{DynamicResource AccentColor}" Foreground="White" FontWeight="Bold" FontSize="14"
-                    Padding="20,10" BorderThickness="0" Cursor="Hand">
+                    Padding="14,7" BorderThickness="0" Cursor="Hand">
                 <Button.Resources>
                     <Style TargetType="Border">
                         <Setter Property="CornerRadius" Value="10"/>
@@ -118,7 +118,7 @@
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
 
-                    <DataGridTemplateColumn Header="Действия" Width="120">
+                    <DataGridTemplateColumn Header="Действия" Width="130">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">

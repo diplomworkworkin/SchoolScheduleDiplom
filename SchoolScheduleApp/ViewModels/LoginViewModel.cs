@@ -12,8 +12,10 @@ namespace SchoolScheduleApp.ViewModels
 {
     public class LoginViewModel : ViewModelBase
     {
-        private string _username;
-        private string _errorMessage;
+        private string _username = string.Empty;
+        private string _errorMessage = string.Empty;
+        private bool _rememberMe;
+        private string _rememberedPassword = string.Empty;
 
         public string Username
         {
@@ -24,20 +26,38 @@ namespace SchoolScheduleApp.ViewModels
         public string ErrorMessage
         {
             get => _errorMessage;
-            set { _errorMessage = value; OnPropertyChanged(); } // Сообщение об ошибке (красным)
+            set { _errorMessage = value; OnPropertyChanged(); }
         }
 
-        // Команда для кнопки
+        public bool RememberMe
+        {
+            get => _rememberMe;
+            set { _rememberMe = value; OnPropertyChanged(); }
+        }
+
+        public string RememberedPassword
+        {
+            get => _rememberedPassword;
+            private set { _rememberedPassword = value; OnPropertyChanged(); }
+        }
+
         public RelayCommand LoginCommand { get; }
 
         public LoginViewModel()
         {
             LoginCommand = new RelayCommand(ExecuteLogin);
+
+            var remembered = RememberMeService.Load();
+            if (remembered != null)
+            {
+                Username = remembered.Username;
+                RememberedPassword = remembered.Password;
+                RememberMe = !string.IsNullOrWhiteSpace(remembered.Username);
+            }
         }
 
         private void ExecuteLogin(object parameter)
         {
-            // Передача пароля из PasswordBox (MVVM хак для безопасности)
             var passwordBox = parameter as PasswordBox;
             var password = passwordBox?.Password;
 
@@ -61,7 +81,16 @@ namespace SchoolScheduleApp.ViewModels
                     return;
                 }
 
-                ErrorMessage = "";
+                if (RememberMe)
+                {
+                    RememberMeService.Save(Username, password);
+                }
+                else
+                {
+                    RememberMeService.Clear();
+                }
+
+                ErrorMessage = string.Empty;
                 UserSession.SetUser(user);
                 AppLogger.LogInfo($"Вход в систему: {user.Username} ({user.Role})");
 
@@ -79,13 +108,16 @@ namespace SchoolScheduleApp.ViewModels
                     return;
                 }
 
+                Application.Current.MainWindow = nextWindow;
                 ToastService.Show($"Добро пожаловать, {user.FullName}!", "Успех");
                 nextWindow.Show();
 
                 foreach (Window window in Application.Current.Windows)
                 {
                     if (window.DataContext == this)
+                    {
                         window.Close();
+                    }
                 }
             }
             catch (Exception ex)

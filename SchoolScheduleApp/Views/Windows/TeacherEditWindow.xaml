@@ -1,4 +1,4 @@
-<Window x:Class="SchoolScheduleApp.Views.Windows.TeacherEditWindow"
+﻿<Window x:Class="SchoolScheduleApp.Views.Windows.TeacherEditWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Редактирование"
@@ -40,6 +40,15 @@
                               DisplayMemberPath="Name"
                               SelectedValuePath="Id"
                               SelectedValue="{Binding Teacher.SubjectId}"
+                              Height="35"/>
+
+                    <TextBlock Text="Закреплённый кабинет:" 
+                               Foreground="{DynamicResource SecondaryText}"
+                               Margin="0,15,0,5"/>
+                    <ComboBox ItemsSource="{Binding Classrooms}"
+                              DisplayMemberPath="Number"
+                              SelectedValuePath="Id"
+                              SelectedValue="{Binding SelectedClassroomId}"
                               Height="35"/>
 
                     <DockPanel Margin="0,10,0,0">

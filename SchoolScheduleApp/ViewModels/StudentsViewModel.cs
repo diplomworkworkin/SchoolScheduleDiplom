@@ -3,12 +3,8 @@ using SchoolSchedule.Context;
 using SchoolSchedule.Entites;
 using SchoolScheduleApp.Core;
 using SchoolScheduleApp.Views.Windows;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace SchoolScheduleApp.ViewModels
@@ -56,7 +52,7 @@ namespace SchoolScheduleApp.ViewModels
 
             var classes = db.AcademicClasses
                 .Include(c => c.CuratorTeacher)
-                .OrderBy(c => c.Name)
+                .OrderBy(c => c.Id)
                 .ToList();
 
             ClassesList = new ObservableCollection<AcademicClass>(classes);
@@ -64,7 +60,12 @@ namespace SchoolScheduleApp.ViewModels
 
         private void ExecuteAddClass()
         {
-            var wnd = new ClassEditWindow(null);
+            var wnd = new ClassEditWindow(null)
+            {
+                Owner = Application.Current?.Windows.OfType<Window>()
+                    .FirstOrDefault(w => w.IsActive && w is not ClassEditWindow)
+                    ?? Application.Current?.MainWindow
+            };
 
             if (wnd.ShowDialog() != true)
                 return;
@@ -114,7 +115,12 @@ namespace SchoolScheduleApp.ViewModels
                 CuratorTeacherId = ac.CuratorTeacherId
             };
 
-            var wnd = new ClassEditWindow(editable);
+            var wnd = new ClassEditWindow(editable)
+            {
+                Owner = Application.Current?.Windows.OfType<Window>()
+                    .FirstOrDefault(w => w.IsActive && w is not ClassEditWindow)
+                    ?? Application.Current?.MainWindow
+            };
 
             if (wnd.ShowDialog() != true)
                 return;

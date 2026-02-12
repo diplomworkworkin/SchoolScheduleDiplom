@@ -87,45 +87,14 @@
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
-                <!-- Шапка + кнопка справа -->
-                <DockPanel Grid.Row="0" Margin="25,22,25,0">
+                <!-- Шапка -->
+                <DockPanel Grid.Row="0" Margin="25,12,25,0">
                     <TextBlock Text="Аналитика загруженности аудиторий" 
                                Foreground="{DynamicResource PrimaryText}" FontSize="16" FontWeight="Bold"
                                DockPanel.Dock="Left"/>
-
-                    <StackPanel Orientation="Horizontal" DockPanel.Dock="Right">
-                        <Button Content="Нагрузка"
-                                Click="BtnOpenWorkloads_Click"
-                                Background="Transparent"
-                                Foreground="{DynamicResource AccentColor}"
-                                BorderBrush="{DynamicResource AccentColor}"
-                                BorderThickness="1"
-                                Padding="14,7"
-                                Cursor="Hand"
-                                Margin="0,0,10,0">
-                            <Button.Resources>
-                                <Style TargetType="{x:Type Border}">
-                                    <Setter Property="CornerRadius" Value="8"/>
-                                </Style>
-                            </Button.Resources>
-                        </Button>
-                        <Button Content="Обновить график"
-                                Command="{Binding RefreshRoomLoadCommand}"
-                                Background="{DynamicResource AccentColor}"
-                                Foreground="White"
-                                Padding="14,7"
-                                BorderThickness="0"
-                                Cursor="Hand">
-                            <Button.Resources>
-                                <Style TargetType="{x:Type Border}">
-                                    <Setter Property="CornerRadius" Value="8"/>
-                                </Style>
-                            </Button.Resources>
-                        </Button>
-                    </StackPanel>
                 </DockPanel>
 
-                <Grid Grid.Row="1" Margin="20,15,20,20">
+                <Grid Grid.Row="1" Margin="20,6,20,20">
                     <Viewbox Stretch="Uniform">
                         <Canvas Width="800" Height="250">
                             <!-- Заливка под линией -->
@@ -146,23 +115,43 @@
                         </Canvas>
                     </Viewbox>
 
-                    <!-- Легенда/подпись справа сверху -->
-                    <Border HorizontalAlignment="Right" VerticalAlignment="Top"
-                            Background="{DynamicResource CardBackground}"
-                            BorderBrush="{DynamicResource CardBorder}"
-                            BorderThickness="1"
-                            CornerRadius="8"
-                            Padding="10,6"
-                            Margin="0,0,0,0">
-                        <StackPanel>
-                            <StackPanel Orientation="Horizontal">
-                                <Ellipse Width="10" Height="10" Fill="#00d2ff" Margin="0,0,6,0"/>
-                                <TextBlock Text="Загрузка (среднее): " Foreground="{DynamicResource SecondaryText}" FontSize="12"/>
-                                <TextBlock Text="{Binding RoomLoadPercentText}" Foreground="{DynamicResource PrimaryText}" FontSize="12" FontWeight="Bold"/>
+                    <!-- Кнопка обновления + легенда справа сверху -->
+                    <StackPanel HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,-2,0,0">
+                        <Button Content="↻"
+                                Width="54"
+                                Height="34"
+                                Margin="0,0,8,8"
+                                HorizontalAlignment="Center"
+                                Command="{Binding RefreshRoomLoadCommand}"
+                                Background="Transparent"
+                                Foreground="{DynamicResource AccentColor}"
+                                BorderBrush="{DynamicResource AccentColor}"
+                                BorderThickness="1"
+                                Cursor="Hand"
+                                ToolTip="Обновить график">
+                            <Button.Resources>
+                                <Style TargetType="{x:Type Border}">
+                                    <Setter Property="CornerRadius" Value="8"/>
+                                </Style>
+                            </Button.Resources>
+                        </Button>
+
+                        <Border Background="{DynamicResource CardBackground}"
+                                BorderBrush="{DynamicResource CardBorder}"
+                                BorderThickness="1"
+                                CornerRadius="8"
+                                Padding="10,6"
+                                Margin="0,0,0,0">
+                            <StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <Ellipse Width="10" Height="10" Fill="#00d2ff" Margin="0,0,6,0"/>
+                                    <TextBlock Text="Загрузка (среднее): " Foreground="{DynamicResource SecondaryText}" FontSize="12"/>
+                                    <TextBlock Text="{Binding RoomLoadPercentText}" Foreground="{DynamicResource PrimaryText}" FontSize="12" FontWeight="Bold"/>
+                                </StackPanel>
+                                <TextBlock Text="{Binding RoomLoadRangeText}" Foreground="{DynamicResource SecondaryText}" FontSize="11" Margin="16,4,0,0"/>
                             </StackPanel>
-                            <TextBlock Text="{Binding RoomLoadRangeText}" Foreground="{DynamicResource SecondaryText}" FontSize="11" Margin="16,4,0,0"/>
-                        </StackPanel>
-                    </Border>
+                        </Border>
+                    </StackPanel>
                 </Grid>
             </Grid>
         </Border>
