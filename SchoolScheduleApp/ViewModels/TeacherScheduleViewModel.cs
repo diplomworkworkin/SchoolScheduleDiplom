@@ -1,4 +1,4 @@
-using SchoolSchedule.Context;
+﻿using SchoolSchedule.Context;
 using SchoolSchedule.Entites;
 using SchoolScheduleApp.Core;
 using System;
@@ -144,6 +144,7 @@ namespace SchoolScheduleApp.ViewModels
 
         private void LoadSchedule()
         {
+            WeekRangeText = GetCurrentWeekRange();
             ScheduleRows.Clear();
 
             var user = UserSession.CurrentUser;

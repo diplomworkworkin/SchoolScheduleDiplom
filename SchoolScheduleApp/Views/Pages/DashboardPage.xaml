@@ -87,42 +87,29 @@
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
-                <!-- Шапка + кнопка справа -->
+                <!-- Шапка + компактная кнопка обновления -->
                 <DockPanel Grid.Row="0" Margin="25,22,25,0">
                     <TextBlock Text="Аналитика загруженности аудиторий" 
                                Foreground="{DynamicResource PrimaryText}" FontSize="16" FontWeight="Bold"
                                DockPanel.Dock="Left"/>
 
-                    <StackPanel Orientation="Horizontal" DockPanel.Dock="Right">
-                        <Button Content="Нагрузка"
-                                Click="BtnOpenWorkloads_Click"
-                                Background="Transparent"
-                                Foreground="{DynamicResource AccentColor}"
-                                BorderBrush="{DynamicResource AccentColor}"
-                                BorderThickness="1"
-                                Padding="14,7"
-                                Cursor="Hand"
-                                Margin="0,0,10,0">
-                            <Button.Resources>
-                                <Style TargetType="{x:Type Border}">
-                                    <Setter Property="CornerRadius" Value="8"/>
-                                </Style>
-                            </Button.Resources>
-                        </Button>
-                        <Button Content="Обновить график"
-                                Command="{Binding RefreshRoomLoadCommand}"
-                                Background="{DynamicResource AccentColor}"
-                                Foreground="White"
-                                Padding="14,7"
-                                BorderThickness="0"
-                                Cursor="Hand">
-                            <Button.Resources>
-                                <Style TargetType="{x:Type Border}">
-                                    <Setter Property="CornerRadius" Value="8"/>
-                                </Style>
-                            </Button.Resources>
-                        </Button>
-                    </StackPanel>
+                    <Button Content="↻"
+                            Width="34"
+                            Height="30"
+                            Command="{Binding RefreshRoomLoadCommand}"
+                            Background="Transparent"
+                            Foreground="{DynamicResource AccentColor}"
+                            BorderBrush="{DynamicResource AccentColor}"
+                            BorderThickness="1"
+                            Cursor="Hand"
+                            DockPanel.Dock="Right"
+                            ToolTip="Обновить график">
+                        <Button.Resources>
+                            <Style TargetType="{x:Type Border}">
+                                <Setter Property="CornerRadius" Value="8"/>
+                            </Style>
+                        </Button.Resources>
+                    </Button>
                 </DockPanel>
 
                 <Grid Grid.Row="1" Margin="20,15,20,20">

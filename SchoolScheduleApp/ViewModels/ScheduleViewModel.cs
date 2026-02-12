@@ -37,6 +37,13 @@ namespace SchoolScheduleApp.ViewModels
         public ObservableCollection<LessonSlot> DayGrid { get; set; } = new();
         public ObservableCollection<LessonRow> ScheduleTable { get; set; } = new();
 
+        private string _weekRangeText = string.Empty;
+        public string WeekRangeText
+        {
+            get => _weekRangeText;
+            set { _weekRangeText = value; OnPropertyChanged(); }
+        }
+
         private int _selectedDay = 1;
         public int SelectedDay
         {
@@ -101,13 +108,24 @@ namespace SchoolScheduleApp.ViewModels
         public ScheduleViewModel()
         {
             AutoGenerateScheduleCommand = new RelayCommand(_ => ExecuteAutoGenerate());
+            UpdateWeekRange();
             LoadClasses();
         }
 
         public void RefreshData()
         {
+            UpdateWeekRange();
             LoadSchedule();
             LoadDayGrid();
+        }
+
+        private void UpdateWeekRange()
+        {
+            var today = System.DateTime.Today;
+            var diff = (7 + (today.DayOfWeek - System.DayOfWeek.Monday)) % 7;
+            var monday = today.AddDays(-diff);
+            var friday = monday.AddDays(4);
+            WeekRangeText = $"Неделя: {monday:dd.MM.yyyy} – {friday:dd.MM.yyyy}";
         }
 
         private void LoadClasses()

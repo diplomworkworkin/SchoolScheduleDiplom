@@ -1,4 +1,4 @@
-using SchoolSchedule.Context;
+﻿using SchoolSchedule.Context;
 using SchoolSchedule.Entites;
 using SchoolScheduleApp.Core;
 using System.Collections.ObjectModel;
@@ -43,11 +43,28 @@ namespace SchoolScheduleApp.ViewModels
             set { _errorMessage = value; OnPropertyChanged(); }
         }
 
+        private string _weekRangeText = string.Empty;
+        public string WeekRangeText
+        {
+            get => _weekRangeText;
+            set { _weekRangeText = value; OnPropertyChanged(); }
+        }
+
         public ClassScheduleViewModel()
         {
+            UpdateWeekRange();
             BuildDefaultFilters();
             LoadOptions();
             LoadSchedule();
+        }
+
+        private void UpdateWeekRange()
+        {
+            var today = System.DateTime.Today;
+            var diff = (7 + (today.DayOfWeek - System.DayOfWeek.Monday)) % 7;
+            var monday = today.AddDays(-diff);
+            var friday = monday.AddDays(4);
+            WeekRangeText = $"Неделя: {monday:dd.MM.yyyy} – {friday:dd.MM.yyyy}";
         }
 
         private void BuildDefaultFilters()
@@ -88,6 +105,7 @@ namespace SchoolScheduleApp.ViewModels
 
         private void LoadSchedule()
         {
+            UpdateWeekRange();
             ScheduleRows.Clear();
 
             if (SelectedClass == null || SelectedClass.Id == 0)

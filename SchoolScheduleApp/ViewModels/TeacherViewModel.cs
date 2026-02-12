@@ -59,7 +59,7 @@ namespace SchoolScheduleApp.ViewModels
 
             var teacherRows = db.Teachers
                 .Include(t => t.Subject)
-                .OrderBy(t => t.FullName)
+                .OrderBy(t => t.Id)
                 .ToList()
                 .Select(t => new TeacherRow
                 {

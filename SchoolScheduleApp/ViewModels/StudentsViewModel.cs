@@ -3,12 +3,8 @@ using SchoolSchedule.Context;
 using SchoolSchedule.Entites;
 using SchoolScheduleApp.Core;
 using SchoolScheduleApp.Views.Windows;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace SchoolScheduleApp.ViewModels
@@ -56,7 +52,7 @@ namespace SchoolScheduleApp.ViewModels
 
             var classes = db.AcademicClasses
                 .Include(c => c.CuratorTeacher)
-                .OrderBy(c => c.Name)
+                .OrderBy(c => c.Id)
                 .ToList();
 
             ClassesList = new ObservableCollection<AcademicClass>(classes);

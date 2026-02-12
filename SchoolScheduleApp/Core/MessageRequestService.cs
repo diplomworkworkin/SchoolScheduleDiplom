@@ -20,6 +20,12 @@ namespace SchoolScheduleApp.Core
         Rejected = 2
     }
 
+    public enum ReplacementMode
+    {
+        AddMyLesson = 0,
+        ReplaceMyLesson = 1
+    }
+
     public class ChatMessage
     {
         public UserRole SenderRole { get; set; }
@@ -38,7 +44,10 @@ namespace SchoolScheduleApp.Core
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
 
-        // Для заявки на замену урока
+        public ReplacementMode? ReplacementMode { get; set; }
+        public int? ReplacementTeacherId { get; set; }
+        public string? ReplacementTeacherName { get; set; }
+
         public int? TargetClassId { get; set; }
         public string? TargetClassName { get; set; }
         public int? TargetDayOfWeek { get; set; }
@@ -98,6 +107,7 @@ namespace SchoolScheduleApp.Core
             {
                 var items = LoadUnsafe();
                 var changed = false;
+
                 foreach (var item in items.Where(x => !x.IsReadByAdmin))
                 {
                     item.IsReadByAdmin = true;
@@ -117,6 +127,7 @@ namespace SchoolScheduleApp.Core
             {
                 var items = LoadUnsafe();
                 var changed = false;
+
                 foreach (var item in items.Where(x => x.TeacherId == teacherId && !x.IsReadByTeacher))
                 {
                     item.IsReadByTeacher = true;
@@ -137,7 +148,10 @@ namespace SchoolScheduleApp.Core
             int? classId,
             string? className,
             int? dayOfWeek,
-            int? lessonIndex)
+            int? lessonIndex,
+            ReplacementMode? replacementMode,
+            int? replacementTeacherId,
+            string? replacementTeacherName)
         {
             if (user.TeacherId == null)
             {
@@ -164,11 +178,14 @@ namespace SchoolScheduleApp.Core
                     TargetClassName = className,
                     TargetDayOfWeek = dayOfWeek,
                     TargetLessonIndex = lessonIndex,
+                    ReplacementMode = replacementMode,
+                    ReplacementTeacherId = replacementTeacherId,
+                    ReplacementTeacherName = replacementTeacherName,
                     IsReadByAdmin = false,
                     IsReadByTeacher = true,
                     Messages = new List<ChatMessage>
                     {
-                        new ChatMessage
+                        new()
                         {
                             SenderRole = UserRole.Teacher,
                             SenderName = user.FullName,
@@ -201,15 +218,15 @@ namespace SchoolScheduleApp.Core
                     return false;
                 }
 
-                var now = DateTime.Now;
                 thread.Messages.Add(new ChatMessage
                 {
                     SenderRole = UserRole.Teacher,
                     SenderName = user.FullName,
                     Text = text.Trim(),
-                    SentAt = now
+                    SentAt = DateTime.Now
                 });
-                thread.UpdatedAt = now;
+
+                thread.UpdatedAt = DateTime.Now;
                 thread.IsReadByAdmin = false;
                 thread.IsReadByTeacher = true;
                 SaveUnsafe(items);
@@ -233,18 +250,17 @@ namespace SchoolScheduleApp.Core
                     return false;
                 }
 
-                var now = DateTime.Now;
                 thread.Messages.Add(new ChatMessage
                 {
                     SenderRole = UserRole.Admin,
                     SenderName = string.IsNullOrWhiteSpace(adminName) ? "Администратор" : adminName.Trim(),
                     Text = text.Trim(),
-                    SentAt = now
+                    SentAt = DateTime.Now
                 });
-                thread.UpdatedAt = now;
+
+                thread.UpdatedAt = DateTime.Now;
                 thread.IsReadByAdmin = true;
                 thread.IsReadByTeacher = false;
-
                 SaveUnsafe(items);
                 return true;
             }
@@ -265,7 +281,6 @@ namespace SchoolScheduleApp.Core
                 thread.UpdatedAt = DateTime.Now;
                 thread.IsReadByAdmin = true;
                 thread.IsReadByTeacher = false;
-
                 SaveUnsafe(items);
                 return true;
             }

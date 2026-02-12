@@ -1,11 +1,12 @@
-﻿<Page x:Class="SchoolScheduleApp.Views.Pages.MessagesPage"
+<Page x:Class="SchoolScheduleApp.Views.Pages.MessagesPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:vm="clr-namespace:SchoolScheduleApp.ViewModels"
       mc:Ignorable="d"
-      d:DesignHeight="720" d:DesignWidth="1200"
+      d:DesignHeight="720"
+      d:DesignWidth="1200"
       Title="MessagesPage">
 
     <Page.DataContext>
@@ -19,17 +20,28 @@
         </Grid.RowDefinitions>
 
         <DockPanel Grid.Row="0" Margin="0,0,0,16">
-            <TextBlock Text="Сообщения" Foreground="{DynamicResource PrimaryText}" FontSize="24" FontWeight="Bold" VerticalAlignment="Center"/>
-            <StackPanel Orientation="Horizontal" DockPanel.Dock="Right">
-                <Button Content="↻ Обновить"
-                        Command="{Binding RefreshCommand}"
+            <TextBlock Text="Сообщения"
+                       VerticalAlignment="Center"
+                       FontSize="24"
+                       FontWeight="Bold"
+                       Foreground="{DynamicResource PrimaryText}"/>
+
+            <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+                <Button Width="34"
+                        Height="34"
                         Margin="0,0,8,0"
+                        Command="{Binding RefreshCommand}"
                         Background="Transparent"
-                        Foreground="{DynamicResource AccentColor}"
                         BorderBrush="{DynamicResource AccentColor}"
                         BorderThickness="1"
-                        Padding="14,8"
-                        Cursor="Hand"/>
+                        Cursor="Hand"
+                        ToolTip="Обновить">
+                    <TextBlock Text="↻"
+                               FontSize="15"
+                               Foreground="{DynamicResource AccentColor}"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"/>
+                </Button>
 
                 <Button Content="Обратиться к администратору"
                         Visibility="{Binding IsTeacher, Converter={StaticResource BooleanToVisibilityConverter}}"
@@ -57,8 +69,13 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
-                    <Border Grid.Row="0" BorderBrush="{DynamicResource CardBorder}" BorderThickness="0,0,0,1" Padding="14,12">
-                        <TextBlock Text="Диалоги" Foreground="{DynamicResource PrimaryText}" FontWeight="Bold"/>
+                    <Border Grid.Row="0"
+                            Padding="14,12"
+                            BorderBrush="{DynamicResource CardBorder}"
+                            BorderThickness="0,0,0,1">
+                        <TextBlock Text="Диалоги"
+                                   FontWeight="Bold"
+                                   Foreground="{DynamicResource PrimaryText}"/>
                     </Border>
 
                     <ListBox Grid.Row="1"
@@ -69,15 +86,22 @@
                              Foreground="{DynamicResource PrimaryText}">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
-                                <Border Margin="8,6" Padding="10" CornerRadius="10" BorderBrush="{DynamicResource CardBorder}" BorderThickness="1" Background="{DynamicResource InputBackground}">
+                                <Border Margin="8,6"
+                                        Padding="10"
+                                        CornerRadius="10"
+                                        BorderBrush="{DynamicResource CardBorder}"
+                                        BorderThickness="1"
+                                        Background="{DynamicResource InputBackground}">
                                     <StackPanel>
                                         <DockPanel>
                                             <TextBlock Text="{Binding Header}" FontWeight="Bold" Foreground="{DynamicResource PrimaryText}"/>
-                                            <TextBlock Text="{Binding UpdatedAtText}" Foreground="{DynamicResource SecondaryText}" FontSize="11" DockPanel.Dock="Right"/>
+                                            <TextBlock Text="{Binding UpdatedAtText}" FontSize="11" Foreground="{DynamicResource SecondaryText}" DockPanel.Dock="Right"/>
                                         </DockPanel>
-                                        <TextBlock Text="{Binding CategoryText}" Foreground="{DynamicResource AccentColor}" FontSize="12" Margin="0,4,0,0"/>
-                                        <TextBlock Text="{Binding LastMessagePreview}" Foreground="{DynamicResource SecondaryText}" Margin="0,4,0,0" TextTrimming="CharacterEllipsis"/>
-                                        <TextBlock Text="{Binding StatusText}" Foreground="{Binding StatusBrush}" FontWeight="Bold" FontSize="12" Margin="0,4,0,0"/>
+
+                                        <TextBlock Margin="0,4,0,0" Text="{Binding CategoryText}" FontSize="12" Foreground="{DynamicResource AccentColor}"/>
+                                        <TextBlock Margin="0,2,0,0" Text="{Binding ReplacementModeText}" FontSize="11" Foreground="{DynamicResource SecondaryText}"/>
+                                        <TextBlock Margin="0,4,0,0" Text="{Binding LastMessagePreview}" Foreground="{DynamicResource SecondaryText}" TextTrimming="CharacterEllipsis"/>
+                                        <TextBlock Margin="0,4,0,0" Text="{Binding StatusText}" FontSize="12" FontWeight="Bold" Foreground="{Binding StatusBrush}"/>
                                     </StackPanel>
                                 </Border>
                             </DataTemplate>
@@ -94,17 +118,27 @@
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
 
-                    <Border Grid.Row="0" BorderBrush="{DynamicResource CardBorder}" BorderThickness="0,0,0,1" Padding="14,12">
+                    <Border Grid.Row="0"
+                            Padding="14,12"
+                            BorderBrush="{DynamicResource CardBorder}"
+                            BorderThickness="0,0,0,1">
                         <StackPanel>
-                            <TextBlock Text="{Binding SelectedConversation.Header, TargetNullValue=Выберите диалог}" Foreground="{DynamicResource PrimaryText}" FontWeight="Bold" FontSize="16"/>
-                            <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
-                                <TextBlock Text="{Binding SelectedConversation.CategoryText}" Foreground="{DynamicResource AccentColor}" Margin="0,0,12,0"/>
-                                <TextBlock Text="{Binding SelectedConversation.StatusText}" Foreground="{Binding SelectedConversation.StatusBrush}" FontWeight="Bold"/>
-                            </StackPanel>
-                            <TextBlock Margin="0,4,0,0" Foreground="{DynamicResource SecondaryText}" FontSize="12">
+                            <TextBlock Text="{Binding SelectedConversation.Header, TargetNullValue=Выберите диалог}"
+                                       FontSize="16"
+                                       FontWeight="Bold"
+                                       Foreground="{DynamicResource PrimaryText}"/>
+
+                            <WrapPanel Margin="0,5,0,0">
+                                <TextBlock Margin="0,0,12,0" Text="{Binding SelectedConversation.CategoryText}" Foreground="{DynamicResource AccentColor}"/>
+                                <TextBlock Margin="0,0,12,0" Text="{Binding SelectedConversation.ReplacementModeText}" Foreground="{DynamicResource SecondaryText}"/>
+                                <TextBlock Text="{Binding SelectedConversation.StatusText}" FontWeight="Bold" Foreground="{Binding SelectedConversation.StatusBrush}"/>
+                            </WrapPanel>
+
+                            <TextBlock Margin="0,4,0,0" FontSize="12" Foreground="{DynamicResource SecondaryText}">
                                 <Run Text="Класс: "/><Run Text="{Binding SelectedConversation.TargetClassName, TargetNullValue=—}"/>
                                 <Run Text=", день: "/><Run Text="{Binding SelectedConversation.TargetDayOfWeek, TargetNullValue=—}"/>
                                 <Run Text=", урок: "/><Run Text="{Binding SelectedConversation.TargetLessonIndex, TargetNullValue=—}"/>
+                                <Run Text=", замещает: "/><Run Text="{Binding SelectedConversation.ReplacementTeacherName, TargetNullValue=—}"/>
                             </TextBlock>
                         </StackPanel>
                     </Border>
@@ -113,19 +147,26 @@
                         <ItemsControl ItemsSource="{Binding ChatMessages}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
-                                    <Border HorizontalAlignment="{Binding Alignment}" Background="{Binding BubbleBackground}" CornerRadius="12" Padding="12" Margin="12,8,12,0" MaxWidth="560" Opacity="0">
+                                    <Border MaxWidth="560"
+                                            Margin="12,8,12,0"
+                                            Padding="12"
+                                            HorizontalAlignment="{Binding Alignment}"
+                                            Background="{Binding BubbleBackground}"
+                                            CornerRadius="12"
+                                            Opacity="0">
                                         <Border.Triggers>
                                             <EventTrigger RoutedEvent="FrameworkElement.Loaded">
                                                 <BeginStoryboard>
                                                     <Storyboard>
-                                                        <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:0.25"/>
+                                                        <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:0.22"/>
                                                     </Storyboard>
                                                 </BeginStoryboard>
                                             </EventTrigger>
                                         </Border.Triggers>
+
                                         <StackPanel>
                                             <TextBlock Text="{Binding Text}" TextWrapping="Wrap" Foreground="{Binding BubbleForeground}"/>
-                                            <TextBlock Text="{Binding Meta}" Foreground="#CCFFFFFF" FontSize="11" Margin="0,6,0,0"/>
+                                            <TextBlock Margin="0,6,0,0" Text="{Binding Meta}" FontSize="11" Foreground="#CCFFFFFF"/>
                                         </StackPanel>
                                     </Border>
                                 </DataTemplate>
@@ -133,15 +174,28 @@
                         </ItemsControl>
                     </ScrollViewer>
 
-                    <Grid Grid.Row="2" Margin="12" Visibility="{Binding CanSendInChat, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <Grid Grid.Row="2"
+                          Margin="12"
+                          Visibility="{Binding CanSendInChat, Converter={StaticResource BooleanToVisibilityConverter}}">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="12"/>
                             <ColumnDefinition Width="140"/>
                         </Grid.ColumnDefinitions>
 
-                        <TextBox Grid.Column="0" Text="{Binding ChatInput, UpdateSourceTrigger=PropertyChanged}" Height="38" VerticalContentAlignment="Center"/>
-                        <Button Grid.Column="2" Content="Отправить" Command="{Binding SendChatMessageCommand}" Background="{DynamicResource AccentColor}" Foreground="White" BorderThickness="0" FontWeight="Bold" Cursor="Hand"/>
+                        <TextBox Grid.Column="0"
+                                 Height="38"
+                                 VerticalContentAlignment="Center"
+                                 Text="{Binding ChatInput, UpdateSourceTrigger=PropertyChanged}"/>
+
+                        <Button Grid.Column="2"
+                                Content="Отправить"
+                                Command="{Binding SendChatMessageCommand}"
+                                Background="{DynamicResource AccentColor}"
+                                Foreground="White"
+                                BorderThickness="0"
+                                FontWeight="Bold"
+                                Cursor="Hand"/>
                     </Grid>
                 </Grid>
             </Border>
@@ -149,10 +203,11 @@
             <Border Grid.ColumnSpan="3"
                     Background="#90000000"
                     Visibility="{Binding IsComposerOpen, Converter={StaticResource BooleanToVisibilityConverter}}">
-                <Grid HorizontalAlignment="Center" VerticalAlignment="Center" Width="720">
+                <Grid Width="760" HorizontalAlignment="Center" VerticalAlignment="Center">
                     <Border Style="{StaticResource GlassCard}" Padding="20" CornerRadius="14">
                         <Grid>
                             <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
@@ -165,18 +220,47 @@
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
 
-                            <TextBlock Grid.Row="0" Grid.ColumnSpan="3" Text="Новая заявка администратору" FontSize="18" FontWeight="Bold" Foreground="{DynamicResource PrimaryText}" Margin="0,0,0,12"/>
+                            <TextBlock Grid.Row="0"
+                                       Grid.ColumnSpan="3"
+                                       Margin="0,0,0,12"
+                                       Text="Новая заявка администратору"
+                                       FontSize="18"
+                                       FontWeight="Bold"
+                                       Foreground="{DynamicResource PrimaryText}"/>
 
                             <ComboBox Grid.Row="1" Grid.Column="0" Margin="0,0,10,10"
-                                      ItemsSource="{Binding Categories}" DisplayMemberPath="Title" SelectedItem="{Binding SelectedCategoryOption}"/>
+                                      ItemsSource="{Binding Categories}"
+                                      DisplayMemberPath="Title"
+                                      SelectedItem="{Binding SelectedCategoryOption}"/>
 
                             <ComboBox Grid.Row="1" Grid.Column="1" Margin="0,0,10,10"
-                                      ItemsSource="{Binding TeacherClasses}" DisplayMemberPath="Name" SelectedItem="{Binding SelectedClassOption}"/>
+                                      Visibility="{Binding IsLessonReplacementSelected, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                      ItemsSource="{Binding ReplacementModes}"
+                                      DisplayMemberPath="Title"
+                                      SelectedItem="{Binding SelectedReplacementModeOption}"/>
 
                             <ComboBox Grid.Row="1" Grid.Column="2" Margin="0,0,0,10"
-                                      ItemsSource="{Binding Days}" DisplayMemberPath="Title" SelectedItem="{Binding SelectedDayOption}"/>
+                                      Visibility="{Binding IsLessonReplacementSelected, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                      ItemsSource="{Binding Days}"
+                                      DisplayMemberPath="Title"
+                                      SelectedItem="{Binding SelectedDayOption}"/>
 
-                            <ComboBox Grid.Row="2" Grid.Column="0" Margin="0,0,10,10" SelectedValuePath="Tag" SelectedValue="{Binding LessonIndex}">
+                            <ComboBox Grid.Row="2" Grid.Column="0" Margin="0,0,10,10"
+                                      Visibility="{Binding IsLessonReplacementSelected, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                      ItemsSource="{Binding TeacherClasses}"
+                                      DisplayMemberPath="Name"
+                                      SelectedItem="{Binding SelectedClassOption}"/>
+
+                            <ComboBox Grid.Row="2" Grid.Column="1" Margin="0,0,10,10"
+                                      Visibility="{Binding IsReplaceByOtherTeacher, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                      ItemsSource="{Binding ReplacementTeachers}"
+                                      DisplayMemberPath="Name"
+                                      SelectedItem="{Binding SelectedReplacementTeacherOption}"/>
+
+                            <ComboBox Grid.Row="2" Grid.Column="2" Margin="0,0,0,10"
+                                      Visibility="{Binding IsLessonReplacementSelected, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                      SelectedValuePath="Tag"
+                                      SelectedValue="{Binding LessonIndex}">
                                 <ComboBoxItem Content="1 урок" Tag="1"/>
                                 <ComboBoxItem Content="2 урок" Tag="2"/>
                                 <ComboBoxItem Content="3 урок" Tag="3"/>
@@ -187,15 +271,35 @@
                                 <ComboBoxItem Content="8 урок" Tag="8"/>
                             </ComboBox>
 
-                            <TextBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Height="36" VerticalContentAlignment="Center"
+                            <TextBox Grid.Row="3"
+                                     Grid.ColumnSpan="3"
+                                     Height="36"
+                                     VerticalContentAlignment="Center"
                                      Text="{Binding NewRequestMessage, UpdateSourceTrigger=PropertyChanged}"/>
 
-                            <TextBlock Grid.Row="3" Grid.ColumnSpan="3" Margin="0,0,0,12" Foreground="{DynamicResource SecondaryText}" FontSize="12"
-                                       Text="Для «Замены урока» укажите класс, день недели и номер урока (1-8). Для «Внести изменения» поля можно не заполнять."/>
+                            <TextBlock Grid.Row="4"
+                                       Grid.ColumnSpan="3"
+                                       Margin="0,0,0,12"
+                                       FontSize="12"
+                                       Foreground="{DynamicResource SecondaryText}"
+                                       Text="Для замены урока: выберите режим, день, класс и номер урока. Если выбран режим «Заменить мой урок», укажите заменяющего учителя."/>
 
-                            <StackPanel Grid.Row="4" Grid.ColumnSpan="3" Orientation="Horizontal" HorizontalAlignment="Right">
-                                <Button Content="Отмена" Command="{Binding ToggleComposerCommand}" Margin="0,0,10,0" Background="Transparent" Foreground="{DynamicResource SecondaryText}" BorderThickness="0" Cursor="Hand"/>
-                                <Button Content="Создать чат-заявку" Command="{Binding CreateRequestCommand}" Background="{DynamicResource AccentColor}" Foreground="White" BorderThickness="0" Padding="14,8" FontWeight="Bold" Cursor="Hand"/>
+                            <StackPanel Grid.Row="5" Grid.ColumnSpan="3" Orientation="Horizontal" HorizontalAlignment="Right">
+                                <Button Content="Отмена"
+                                        Margin="0,0,10,0"
+                                        Command="{Binding ToggleComposerCommand}"
+                                        Background="Transparent"
+                                        Foreground="{DynamicResource SecondaryText}"
+                                        BorderThickness="0"
+                                        Cursor="Hand"/>
+                                <Button Content="Создать чат-заявку"
+                                        Command="{Binding CreateRequestCommand}"
+                                        Background="{DynamicResource AccentColor}"
+                                        Foreground="White"
+                                        BorderThickness="0"
+                                        Padding="14,8"
+                                        FontWeight="Bold"
+                                        Cursor="Hand"/>
                             </StackPanel>
                         </Grid>
                     </Border>
@@ -203,9 +307,9 @@
             </Border>
 
             <StackPanel Grid.Column="2"
+                        Margin="0,12,12,0"
                         HorizontalAlignment="Right"
                         VerticalAlignment="Top"
-                        Margin="0,12,12,0"
                         Orientation="Horizontal"
                         Visibility="{Binding CanModerate, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <Button Content="Принять заявку"

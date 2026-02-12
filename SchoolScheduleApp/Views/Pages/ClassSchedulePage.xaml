@@ -28,6 +28,10 @@
                        Foreground="{DynamicResource SecondaryText}"
                        FontSize="12"
                        Margin="0,6,0,0"/>
+            <TextBlock Text="{Binding WeekRangeText}"
+                       Foreground="{DynamicResource SecondaryText}"
+                       FontSize="12"
+                       Margin="0,4,0,0"/>
         </StackPanel>
 
         <Border Grid.Row="1" Style="{StaticResource GlassCard}" Padding="16" Margin="0,0,0,20">
