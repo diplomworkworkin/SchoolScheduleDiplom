@@ -58,6 +58,8 @@
                       Foreground="{DynamicResource PrimaryText}"
                       AutoGenerateColumns="False" CanUserAddRows="False"
                       RowHeight="45" ColumnHeaderHeight="45"
+                      HorizontalAlignment="Stretch"
+                      ColumnWidth="*"
                       PreviewMouseDown="NonInteractiveGrid_PreviewMouseDown"
                       PreviewKeyDown="NonInteractiveGrid_PreviewKeyDown">
 
@@ -94,9 +96,9 @@
                 </DataGrid.Resources>
 
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="60"/>
+                    <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="80"/>
 
-                    <DataGridTemplateColumn Header="Класс" Width="150">
+                    <DataGridTemplateColumn Header="Класс" Width="1.1*">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Border Background="{DynamicResource AccentColor}" CornerRadius="5" Padding="8,2" HorizontalAlignment="Left">
@@ -106,11 +108,11 @@
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
 
-                    <DataGridTextColumn Header="Учеников" Binding="{Binding StudentCount}" Width="150"/>
-                    <DataGridTextColumn Header="Смена" Binding="{Binding Shift}" Width="100"/>
-                    <DataGridTextColumn Header="Куратор" Binding="{Binding CuratorTeacher.FullName}" Width="250"/>
+                    <DataGridTextColumn Header="Учеников" Binding="{Binding StudentCount}" Width="0.9*"/>
+                    <DataGridTextColumn Header="Смена" Binding="{Binding Shift}" Width="0.7*"/>
+                    <DataGridTextColumn Header="Куратор" Binding="{Binding CuratorTeacher.FullName}" Width="2.2*"/>
 
-                    <DataGridTemplateColumn Header="Действия" Width="120">
+                    <DataGridTemplateColumn Header="Действия" Width="140">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">

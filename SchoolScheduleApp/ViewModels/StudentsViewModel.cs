@@ -64,7 +64,12 @@ namespace SchoolScheduleApp.ViewModels
 
         private void ExecuteAddClass()
         {
-            var wnd = new ClassEditWindow(null);
+            var wnd = new ClassEditWindow(null)
+            {
+                Owner = Application.Current?.Windows.OfType<Window>()
+                    .FirstOrDefault(w => w.IsActive && w is not ClassEditWindow)
+                    ?? Application.Current?.MainWindow
+            };
 
             if (wnd.ShowDialog() != true)
                 return;
@@ -114,7 +119,12 @@ namespace SchoolScheduleApp.ViewModels
                 CuratorTeacherId = ac.CuratorTeacherId
             };
 
-            var wnd = new ClassEditWindow(editable);
+            var wnd = new ClassEditWindow(editable)
+            {
+                Owner = Application.Current?.Windows.OfType<Window>()
+                    .FirstOrDefault(w => w.IsActive && w is not ClassEditWindow)
+                    ?? Application.Current?.MainWindow
+            };
 
             if (wnd.ShowDialog() != true)
                 return;

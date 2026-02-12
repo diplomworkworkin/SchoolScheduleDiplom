@@ -70,6 +70,15 @@ namespace SchoolScheduleApp.Core
 
         private static Window? GetHostWindow()
         {
+            var main = Application.Current?.MainWindow;
+            if (main != null
+                && main.IsVisible
+                && main.WindowState != WindowState.Minimized
+                && main is not ToastNotificationWindow)
+            {
+                return main;
+            }
+
             var windows = Application.Current?.Windows.OfType<Window>()
                 .Where(w => w.IsVisible
                             && w.WindowState != WindowState.Minimized
@@ -78,7 +87,7 @@ namespace SchoolScheduleApp.Core
 
             if (windows == null || windows.Count == 0)
             {
-                return Application.Current?.MainWindow;
+                return main;
             }
 
             var rootWindows = windows
@@ -89,15 +98,6 @@ namespace SchoolScheduleApp.Core
             if (activeRoot != null)
             {
                 return activeRoot;
-            }
-
-            var main = Application.Current?.MainWindow;
-            if (main != null
-                && main.IsVisible
-                && main.WindowState != WindowState.Minimized
-                && main is not ToastNotificationWindow)
-            {
-                return main;
             }
 
             var largestRoot = rootWindows

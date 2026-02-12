@@ -1,4 +1,4 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using SchoolSchedule.Context;
 using SchoolSchedule.Entites;
 using SchoolScheduleApp.Core;
@@ -75,7 +75,12 @@ namespace SchoolScheduleApp.ViewModels
 
         private void ExecuteAdd()
         {
-            var wnd = new TeacherEditWindow(new Teacher());
+            var wnd = new TeacherEditWindow(new Teacher())
+            {
+                Owner = Application.Current?.Windows.OfType<Window>()
+                    .FirstOrDefault(w => w.IsActive && w is not TeacherEditWindow)
+                    ?? Application.Current?.MainWindow
+            };
 
             if (wnd.ShowDialog() == true)
             {
@@ -101,7 +106,12 @@ namespace SchoolScheduleApp.ViewModels
                 SubjectId = fromDb.SubjectId
             };
 
-            var wnd = new TeacherEditWindow(editable);
+            var wnd = new TeacherEditWindow(editable)
+            {
+                Owner = Application.Current?.Windows.OfType<Window>()
+                    .FirstOrDefault(w => w.IsActive && w is not TeacherEditWindow)
+                    ?? Application.Current?.MainWindow
+            };
             if (wnd.ShowDialog() != true) return;
 
             fromDb.FullName = editable.FullName;
